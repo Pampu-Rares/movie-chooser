@@ -1,10 +1,12 @@
 
+import { NavLink } from 'react-router-dom'
 import '../css/navbar.css'
 
 function Navbar() {
     return (
         <nav>
-            <p>Movie Chooser</p>
+            <NavLink to={'/popularMovies'} id="popular-movies-link">Popular</NavLink>
+            <p id="navbar-title">Movie Chooser</p>
         </nav>
     )
 }

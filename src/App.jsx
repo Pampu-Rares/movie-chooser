@@ -1,11 +1,9 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
-import './App.css'
+import './css/App.css'
 import { Routes, Route} from 'react-router-dom'
 import LandingPage from './screens/LandingPage'
 import Navbar from './ components/Navbar'
+import PopularMovies from './screens/PopularMovies'
 
 function App() {
 
@@ -14,6 +12,7 @@ function App() {
       <Navbar />
       <Routes>
         <Route path='/' element={<LandingPage />} />
+        <Route path='/popularMovies' element={<PopularMovies />} />
       </Routes>
     </main>
   )

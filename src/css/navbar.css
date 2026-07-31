@@ -3,7 +3,28 @@ nav {
     display: flex;
     flex-direction: row;
     justify-content: center;
+    align-items: center;
+    padding: 5px;
 
     background-color: var(--secondary);
     color: var(--text-color);
+}
+
+a {
+    color: var(--text-color);
+    text-decoration: none;
+
+    padding: clamp(5px, 3vw, 10px);
+    border-radius: 15px;
+
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+a:hover {
+    background-color: var(--primary);
+    color: var(--on-primary);
+}
+
+#popular-movies-link {
+    margin-right: auto;
 }

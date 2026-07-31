@@ -12,6 +12,14 @@
   --onAccent: white;
 }
 
+body {
+  margin: 0;
+}
+
+h1, p {
+  color: var(--text-color)
+}
+
 h1 {
   text-align: center;
 }
