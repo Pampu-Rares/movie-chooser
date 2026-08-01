@@ -6,7 +6,8 @@ function Navbar() {
     return (
         <nav>
             <NavLink to={'/popularMovies'} id="popular-movies-link">Popular</NavLink>
-            <p id="navbar-title">Movie Chooser</p>
+            <NavLink to={'/'} id="navbar-title">Movie Chooser</NavLink>
+            <NavLink to={'/'}>Join room</NavLink>
         </nav>
     )
 }

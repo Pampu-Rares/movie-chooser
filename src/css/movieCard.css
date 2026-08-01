@@ -2,6 +2,7 @@
     background-color: var(--secondary);
 
     width: clamp(40px, 70%, 300px);
+    height: clamp(430px, 50vh, 600px);
     padding: clamp(5px, 5vw, 15px);
 
     display: flex;

@@ -1,8 +1,7 @@
 nav {
-    width: 100%;
     display: flex;
     flex-direction: row;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     padding: 5px;
 
@@ -20,11 +19,16 @@ a {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-a:hover {
+a:hover:not(#navbar-title) {
     background-color: var(--primary);
     color: var(--on-primary);
 }
 
-#popular-movies-link {
-    margin-right: auto;
+#navbar-title {
+    text-decoration:underline ;
+    transition: transform 0.3s ease;
+}
+
+#navbar-title:hover {
+    transform: scale(1.1);
 }
