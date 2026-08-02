@@ -1,3 +1,10 @@
+#popular-movies-page {
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* should use clamp */
+    align-items: center;
+}
+
 #popular-movies-container {
     display: flex;
     flex-direction: row;
@@ -5,4 +12,82 @@
     align-items: center;
     justify-content: center;
     gap: 20px;
+}
+
+#search-movie-form {
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: center;
+    width: clamp(20px, 80%, 200px);
+    gap: clamp(5px, 3vw, 20px);
+    
+}
+
+#search-bar-container {
+    position: relative;
+
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    border: 5px solid transparent;
+
+    font-size: 0.9rem;
+
+}
+
+#search-bar {
+    height: 100%;
+    border-radius: 10px;
+    border: 5px solid var(--accent);
+    color: var(--on-primary);
+    background-color: var(--primary);
+
+    font-size: 0.9rem;
+}
+
+#delete-search {
+    margin: 0;
+    padding: 1%;
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    position: absolute;
+    right: 4%;
+
+    transition: opacity 0.3s ease;
+}
+
+
+#delete-search:hover {
+    background-color: var(--background-color);
+    color: var(--text-color)
+}
+
+#search-input-btn {
+    margin: 0;
+    font-size: 1.1rem;
+    width: clamp(20px, 20vw, 55px);
+    height: clamp(20px, 20vw, 55px);
+    border-radius: 90%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    border: 5px solid var(--secondary)
+}
+
+#loading-message {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+
+    transition: opacity 0.3s ease;
+}
+
+.hidden {
+    pointer-events: none;
+    opacity: 0;
 }

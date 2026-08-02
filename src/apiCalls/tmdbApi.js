@@ -6,3 +6,9 @@ export async function getPopularMovies() {
     popularMovies = await popularMovies.json()
     return popularMovies.results
 }
+
+export async function searchMovies(query) {
+    let searchResult = await fetch(`${BASE_URL}/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}`)
+    searchResult = await searchResult.json()
+    return searchResult.results
+}
