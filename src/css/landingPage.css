@@ -1,8 +1,34 @@
 #landing-page {
     flex: 1;
-    height: auto;
+    height: auto; /* do I need this? */
+    padding: 20px;
 
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: clamp(15px, 2vw, 25px);
+}
+
+h1 {
+    margin: 20px;
+}
+
+#play-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(5px, 30%, 20px);
+}
+
+#play-buttons button {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 400;
+}
+
+@media (min-width: 1000px) {
+    #play-buttons {
+        flex-direction: row;
+    }
 }

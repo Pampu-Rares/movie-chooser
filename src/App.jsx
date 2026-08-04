@@ -4,6 +4,7 @@ import { Routes, Route} from 'react-router-dom'
 import LandingPage from './screens/LandingPage'
 import Navbar from './components/Navbar'
 import PopularMovies from './screens/PopularMovies'
+import CreateRoom from './screens/CreateRoom'
 
 function App() {
 
@@ -14,6 +15,7 @@ function App() {
         <Routes>
           <Route path='/' element={<LandingPage />} />
           <Route path='/popularMovies' element={<PopularMovies />} />
+          <Route path='/createRoom' element={<CreateRoom />} />
         </Routes>
       </main>
     </>

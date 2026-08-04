@@ -83,6 +83,8 @@
     position: absolute;
     inset: 0;
     margin: auto;
+    width:fit-content;
+    height: fit-content;
 
     transition: opacity 0.3s ease;
 }

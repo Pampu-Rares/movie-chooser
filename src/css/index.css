@@ -6,7 +6,7 @@
   --background-color: #ddf9f5;
   --text-color: #081210;
   --on-primary: var(--text-color);
-  --primary: #2cd8bd;
+  --primary: #34d8e4;
   --secondary: #8ab7ea;
   --accent: #5977e1;
   --onAccent: white;
@@ -37,7 +37,7 @@ h1 {
 button {
   background-color: var(--primary);
   color: var(--on-primary);
-  padding: clamp(10px, 2vw, 25px);
+  padding: clamp(10px, 1vw, 20px);
   margin: 20px;
 
   cursor: pointer;
