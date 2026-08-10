@@ -5,6 +5,7 @@ import LandingPage from './screens/LandingPage'
 import Navbar from './components/Navbar'
 import PopularMovies from './screens/PopularMovies'
 import CreateRoom from './screens/CreateRoom'
+import ChooseMovieGame from './screens/ChooseMovie'
 
 function App() {
 
@@ -16,6 +17,7 @@ function App() {
           <Route path='/' element={<LandingPage />} />
           <Route path='/popularMovies' element={<PopularMovies />} />
           <Route path='/createRoom' element={<CreateRoom />} />
+          <Route path='/findMovie' element={<ChooseMovieGame />} />
         </Routes>
       </main>
     </>

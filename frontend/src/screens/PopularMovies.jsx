@@ -1,7 +1,7 @@
 import '../css/popularMovies.css'
 import MovieCard from "../components/MovieCard"
 import { useState, useEffect} from 'react'
-import { getPopularMovies, searchMovies } from '../apiCalls/tmdbApi'
+import { getPopularMovies, searchMovies } from '../services/tmdbApi'
 
 function PopularMovies() {
     const [loading, setLoading] = useState(true)
