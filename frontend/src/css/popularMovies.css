@@ -19,7 +19,6 @@
     flex-direction: row;
     align-items: stretch;
     justify-content: center;
-    width: clamp(20px, 80%, 200px);
     gap: clamp(5px, 3vw, 20px);
     
 }
@@ -40,6 +39,7 @@
 
 #search-bar {
     height: 100%;
+    padding-left: 10px;
     border-radius: 10px;
     border: 5px solid var(--accent);
     color: var(--on-primary);

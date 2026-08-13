@@ -133,7 +133,7 @@ function ChooseMovieGame() {
       setTimeout(() => {
         setCurrentMatch({
           isMatch: true,
-          movie: currentMovieOption
+          movie: currentMovieOption.movie
         })
       }, 300)
       setTimeout(() => {
@@ -160,7 +160,7 @@ function ChooseMovieGame() {
       setTimeout(() => {
         setCurrentMatch(prev => ({
           ...prev,
-          movie: null,
+          movie: currentMovieOption.movie,
         }))
       }, 1000)
     }

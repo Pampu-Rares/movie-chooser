@@ -5,7 +5,7 @@ function MatchDialog({ match, skipMatch }) {
         <div id="match-dialog" className={match.isMatch ? 'visible' : 'hidden'}>
             <p>You found your movie!</p>
             <div id='poster-container'>
-                {match.movie && <img src={match.movie.movie.posterHref} /> }
+                {match.movie && <img src={match.movie.posterHref} /> }
             </div>
             <button id='check-out-movie'>Check out movie!</button>
             <button id='skip' onClick={skipMatch}>Continue</button>

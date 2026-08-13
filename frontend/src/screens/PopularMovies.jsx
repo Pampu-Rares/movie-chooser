@@ -1,7 +1,7 @@
 import '../css/popularMovies.css'
 import MovieCard from "../components/MovieCard"
 import { useState, useEffect} from 'react'
-import { getPopularMovies, searchMovies } from '../services/tmdbApi'
+import { getPopularMovies, searchMovies } from '../services/serverFetches.js'
 
 function PopularMovies() {
     const [loading, setLoading] = useState(true)
@@ -50,7 +50,6 @@ function PopularMovies() {
                 const popularMovies = await getPopularMovies()
                 if(Array.isArray(popularMovies)) {
                     setMovies(popularMovies)
-                    console.log(popularMovies[0])
                 } else {
                     throw new Error('Invalid data')
                 }

@@ -9,7 +9,7 @@
   --primary: #34d8e4;
   --secondary: #8ab7ea;
   --accent: #5977e1;
-  --onAccent: white;
+  --on-accent: white;
 }
 
 body {
@@ -62,6 +62,6 @@ button:hover {
     --primary: #9ca1d3;
     --secondary: #154275;
     --accent: #1e3ba4;
-    --onAccent: white;
+    --on-accent: white;
   }
 }
