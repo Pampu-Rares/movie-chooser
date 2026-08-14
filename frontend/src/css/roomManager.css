@@ -1,0 +1,56 @@
+
+
+#room-code-container {
+    padding: 15px 20px;
+    border-radius: 15px;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    background-color: var(--primary);
+    color: var(--on-primary);
+
+    p {
+        margin: 10px;
+    }
+
+    p:first-of-type {
+        font-size: 1.1rem;
+    }
+}
+
+#room-code {
+    font-size: 1.3rem;
+    background-color: var(--secondary);
+    padding: 10px;
+    border-radius: 20px;
+}
+
+#users-container {
+    margin-top: 20px;
+    background-color: var(--primary);
+    width: 80%;
+    padding: 20px;
+    border-radius: 20px;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.user {
+    background-color: var(--secondary);
+    width: clamp(20px, 20%, 300px);
+    padding: 20px;
+    border-radius: 15px;
+}
+
+.username {
+    margin: 0;
+}

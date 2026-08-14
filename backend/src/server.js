@@ -2,7 +2,7 @@ import express from 'express'
 import cors from 'cors'
 import { Server } from 'socket.io'
 import { getPopularMovies, searchMovies, getGameMovies } from './tmdbApiCalls.js'
-import handleDisconnect from './handleSocketDisconnect.js'
+//import handleDisconnect from './handleSocketDisconnect.js'
 
 
 const app = express()
@@ -72,14 +72,14 @@ io.on('connection', async (socket) => {
         socket.emit('roomCode', code)
     })
     socket.on('joinRoom', ([code, username]) => {
-        const currentRoom = rooms.get(code)
+        const currentRoom = rooms.get(code) // check if it doesnt exist
         const updatedRoom = {
             ...currentRoom,
             users: [...currentRoom.users, socket.id]
         }
         rooms.set(code, updatedRoom)
         userRooms.set(socket.io, code)
-        io.to(code).emit('userJoin', username)
+        io.to(code).emit('userJoin', username) // not enough
         socket.join(code)
     })
     socket.on('startGame', async (room) => {
@@ -101,13 +101,12 @@ io.on('connection', async (socket) => {
 
         const updatedRoom = {
             ...currentRoom,
-            currentRoom = updatedLikedMovies
+            likedMovies: updatedLikedMovies
         }
         if(updatedLikedMovies[movieId] > Math.floor(currentRoom.users.length / 2))
             socket.to(code).emit('match', movieId)
     })
 
     socket.on('disconnect', () => {
-        handleDisconnect(socket, io)
     })
 })
