@@ -1,4 +1,19 @@
+#room-manager-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    width: 95%;
+    margin-top: 20px;
+}
 
+#delete-room {
+    background-color: red;
+    color: white;
+
+    width: fit-content;
+    align-self: flex-end;
+}
 
 #room-code-container {
     padding: 15px 20px;
@@ -20,6 +35,7 @@
 
     p:first-of-type {
         font-size: 1.1rem;
+        color: var(--on-primary);
     }
 }
 
@@ -30,27 +46,9 @@
     border-radius: 20px;
 }
 
-#users-container {
-    margin-top: 20px;
-    background-color: var(--primary);
-    width: 80%;
-    padding: 20px;
-    border-radius: 20px;
+#play {
+    margin-top: 15px;
+    width: 93%;
 
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-}
-
-.user {
-    background-color: var(--secondary);
-    width: clamp(20px, 20%, 300px);
-    padding: 20px;
-    border-radius: 15px;
-}
-
-.username {
-    margin: 0;
+    font-size: 1.3rem;
 }

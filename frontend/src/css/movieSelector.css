@@ -83,7 +83,7 @@ h3 {
     max-height: 0;
     opacity: 0;
 
-    color: var(--text-color);
+    color: var(--on-primary);
 
     overflow: hidden; 
 

@@ -1,9 +1,9 @@
+import '../css/matchesList.css'
 import MovieCard from "./MovieCard"
 
 function MatchesList({ matches }) {
-    console.log(matches) // smth is broken here
     return (
-        <div>
+        <div id='matches-container'>
             <p id='end-message'>You went through all of the movies</p>
             {!matches.length ? (
                 <div>

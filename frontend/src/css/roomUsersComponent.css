@@ -1,0 +1,28 @@
+
+#users-container {
+    margin-top: 20px;
+    background-color: var(--primary);
+    width: 80%;
+    min-height: 30vh;
+    padding: 20px;
+    border-radius: 20px;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.user {
+    background-color: var(--secondary);
+    width: fit-content;
+    padding: 20px;
+    border-radius: 15px;
+    text-align: center;
+}
+
+.username {
+    margin: 0;
+}

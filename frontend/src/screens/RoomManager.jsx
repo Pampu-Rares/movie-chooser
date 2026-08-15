@@ -1,60 +1,68 @@
 import '../css/roomManager.css'
-import { useSearchParams } from "react-router-dom"
-import { useState, useEffect, use } from "react"
+import { useNavigate, useSearchParams } from "react-router-dom"
+import { useState, useEffect } from "react"
 import { socket } from "../services/socketLogic"  
+import RoomUsers from '../components/RoomUsers.jsx'
 
 function RoomManager() {
+    const navigate = useNavigate()
     const [searchParams] = useSearchParams()
-
     const isAdmin = searchParams.get('isAdmin')
-    const username = searchParams.get('username')
-    const [socketId, setSocketId] = useState(null)
+    const username = decodeURIComponent(searchParams.get('username'))
+
     const [roomCode, setRoomCode] = useState(null)
     const [users, setUsers] = useState([])
 
+    const handleRoomDelete = () => {
+        socket.emit('deleteRoom', roomCode, () => {
+            navigate('/')
+        })
+    }
+
+    const startGame = () => {
+        socket.emit('startGame', roomCode)
+        navigate('/findMovie?roomCode='+roomCode)
+    }
+
     useEffect(() => {
         const handleConnection = () => {
-            setSocketId(socket.id)
-            socket.emit('createRoom')
+            socket.emit('createRoom', username, (code) => {
+                setRoomCode(code)
+                setUsers([{id: socket.id, name: username}])
+            })
         }
-        const handleRoomCode = (code) => {
-            setRoomCode(code)
-            setUsers([{id: socketId, name: username}])
-        }
-        const handleUserJoin = user => {
-            setUsers(oldUsers => [...oldUsers, {id: user.id, name: user.name}])
+
+        const handleUsers = (userId, users) => {
+            setUsers(users)
         }
 
         socket.on('connect', handleConnection)
-        socket.on('roomCode', handleRoomCode)
-        socket.on('userJoin', handleUserJoin)
+        socket.on('userJoin', handleUsers)
+        socket.on('userLeft', handleUsers)
 
-        socket.connect()
+        if(!socket.connected) {
+            socket.connect()
+        } else handleConnection()
 
         return () => {
             socket.off('connect', handleConnection)
-            socket.off('roomCode', handleRoomCode)
-            // dont forget to add them all
+            socket.off('userJoin', handleUsers)
+            socket.off('userLeft', handleUsers)
         }
     }, [])
 
     return (
-        <>
-            <p>Room manager {isAdmin && 'for Admin'}</p>
-            <p>Socket id: {socketId ? socketId : 'none'}</p>
+        <div id='room-manager-container'>
+            <button id='delete-room' onClick={handleRoomDelete}>Delete Room</button>
+            <h1>Manage room</h1>
+            <p>Socket id: {socket.id ? socket.id : 'none'}</p>
             <div id="room-code-container">
                 <p>Room code:</p>
                 <p id='room-code'>{roomCode}</p>
             </div>
-            <div id='users-container'>
-                {users.map(user => (
-                    <div className='user' key={user.id}>
-                        <p className='username'>{user.name}</p>
-                    </div>
-                ))}
-            </div>
-            
-        </>
+            <RoomUsers users={users} />
+            <button id='play' onClick={startGame}>Start game</button>
+        </div>
     )
 }
 

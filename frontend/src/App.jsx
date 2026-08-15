@@ -8,6 +8,7 @@ import CreateRoom from './screens/CreateRoom'
 import ChooseMovieGame from './screens/ChooseMovie'
 import RoomManager from './screens/RoomManager'
 import JoinRoom from './screens/JoinRoom'
+import JoinedRoom from './screens/JoinedRoom'
 
 function App() {
 
@@ -22,6 +23,7 @@ function App() {
           <Route path='/findMovie' element={<ChooseMovieGame />} />
           <Route path='/manageRoom' element={<RoomManager />} />
           <Route path='/joinRoom' element={<JoinRoom />} />
+          <Route path='/joinedRoom' element={<JoinedRoom />} />
         </Routes>
       </main>
     </>

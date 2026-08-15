@@ -7,9 +7,9 @@ function MovieSelector({movie, handleDislike, handleLike, like, dislike}) {
         <div id='swiper-container' className={like || dislike ? 'stop-overflow' : ''}>
             <div id="movie-selector" className={like ? 'liked' : dislike ? 'disliked' : ''}>
                 <div id='movie-poster-container'>
-                    <img id='movie-poster' src={movie.posterHref} />
+                    <img id='movie-poster' src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} />
                 </div>
-                <h3 id='movie-title'>{movie.name}</h3>
+                <h3 id='movie-title'>{movie.title}</h3>
                 <div id='controls'>
                     <button id="dislike-btn" onClick={handleDislike}>
                         <img src='/negative-vote.png' />
@@ -19,7 +19,7 @@ function MovieSelector({movie, handleDislike, handleLike, like, dislike}) {
                         <img src='/positive-vote.png' />
                     </button>
                 </div>
-                <p id='movie-description' style={{maxHeight: showDetails ? '600px' : '0', opacity: showDetails ? '1' : '0' }}>{movie.description}</p>
+                <p id='movie-description' style={{maxHeight: showDetails ? '600px' : '0', opacity: showDetails ? '1' : '0' }}>{movie.overview}</p>
             </div>
         </div>
     )
