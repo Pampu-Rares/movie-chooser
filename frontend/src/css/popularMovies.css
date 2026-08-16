@@ -17,9 +17,11 @@
 #search-movie-form {
     display: flex;
     flex-direction: row;
-    align-items: stretch;
     justify-content: center;
     gap: clamp(5px, 3vw, 20px);
+    height: fit-content;
+    width: fit-content;
+    background-color: transparent;
     
 }
 
@@ -38,7 +40,6 @@
 }
 
 #search-bar {
-    height: 100%;
     padding-left: 10px;
     border-radius: 10px;
     border: 5px solid var(--accent);
@@ -50,6 +51,7 @@
 
 #delete-search {
     margin: 0;
+    width: fit-content;
     padding: 1%;
     background-color: transparent;
     border: none;
