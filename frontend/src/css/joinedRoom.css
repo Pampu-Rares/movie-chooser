@@ -10,3 +10,20 @@
     width: fit-content;
     align-self: flex-end;
 }
+
+#kicked-out-dialog {
+    position: absolute;
+    inset: 0;
+    width: fit-content;
+    height: fit-content;
+    margin: auto;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.hidden {
+    opacity: 0;
+}

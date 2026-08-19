@@ -12,6 +12,7 @@ function JoinedRoom() {
 
     const [users, setUsers] = useState([])
     const [socketId, setSocketId] = useState('')
+    const [kickedOut, setKickedOut] = useState(false)
 
     const leaveRoom = () => {
         socket.emit('leaveRoom', roomCode, () => {
@@ -46,9 +47,14 @@ function JoinedRoom() {
         const handleDeletedRoom = () => {
             navigate('/joinRoom')
         }
+        const handleKick = () => {
+            setKickedOut(true)
+        }
         socket.on('deletedRoom', handleDeletedRoom)
+        socket.on('kickedOut', handleKick)
         return () => {
             socket.off('deletedRoom', handleDeletedRoom)
+            socket.off('kickedOut', handleKick)
         }
     }, [])
 
@@ -64,16 +70,23 @@ function JoinedRoom() {
     }, [])
 
     return (
-        <div id='joined-room-container'>
-            <button id='leave-room-btn' onClick={leaveRoom}>Leave</button>
-            <h1>Joined Room</h1>
-            <p>Socket id: {socketId ? socketId : 'none'}</p>
-            <div id="room-code-container">
-                <p>Room code:</p>
-                <p id='room-code'>{roomCode}</p>
+        <>
+            <div id='joined-room-container'>
+                <button id='leave-room-btn' onClick={leaveRoom}>Leave</button>
+                <h1>Joined Room</h1>
+                <p>Socket id: {socketId ? socketId : 'none'}</p>
+                <div id="room-code-container">
+                    <p>Room code:</p>
+                    <p id='room-code'>{roomCode}</p>
+                </div>
+                <RoomUsers users={users} />
             </div>
-            <RoomUsers users={users} />
-        </div>
+            <div id='kicked-out-dialog' className={!kickedOut ? hidden : ''}>
+                <h3>Kicked out</h3>
+                <p id='kick-explanation'>The admin kicked you out of the room. Return to the join room menu?</p>
+                <button id='return-from-kick' onClick={() => {navigate('/joinRoom')}}>Return</button>
+            </div>
+        </>
     )
 }
 

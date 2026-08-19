@@ -141,7 +141,20 @@ io.on('connection', async (socket) => {
             users: newUsers
         })
         leaveRoom()
+        userRooms.delete(socket.id)
         socket.to(code).emit('userLeft', socket.id, newUsers)
+    })
+    
+    socket.on('kickUser', (userId, code) => {
+        const room = roomd.get(code)
+        io.to(userId).emit('kickedOut')
+        const newUsers = oldRoom.users.filter(user => user.id !== userId)
+        rooms.set(code, {
+            ...room,
+            users: newUsers
+        })
+        userRooms.delete(userId)
+        socket.to(code).emit('userLeft', userId, newUsers) // maybe i should implement a different message to emit
     })
 
     socket.on('deleteRoom', (code, handleAdminDeletion) => {

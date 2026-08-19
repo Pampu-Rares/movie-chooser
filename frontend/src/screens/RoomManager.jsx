@@ -23,6 +23,9 @@ function RoomManager() {
         socket.emit('startGame', roomCode)
         navigate('/findMovie?roomCode='+roomCode)
     }
+    const handleKick = userId => {
+        socket.emit('kickUser', userId, roomCode)
+    }
 
     useEffect(() => {
         const handleConnection = () => {
@@ -45,6 +48,7 @@ function RoomManager() {
         } else handleConnection()
 
         return () => {
+            socket.emit('deleteRoom', roomCode, () => {})
             socket.off('connect', handleConnection)
             socket.off('userJoin', handleUsers)
             socket.off('userLeft', handleUsers)
@@ -60,7 +64,7 @@ function RoomManager() {
                 <p>Room code:</p>
                 <p id='room-code'>{roomCode}</p>
             </div>
-            <RoomUsers users={users} />
+            <RoomUsers users={users} handleKick={handleKick} />
             <button id='play' onClick={startGame}>Start game</button>
         </div>
     )

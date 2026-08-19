@@ -1,14 +1,45 @@
 import { useNavigate } from 'react-router-dom'
 import '../css/landingPage.css'
+import { useEffect, useState } from 'react'
 
 function LandingPage() {
     const navigate = useNavigate()
+    const [moviePoster, setMoviePoster] = useState('landingPagePosters/poster_4.jpg')
+    const [hiddenPoster, setHiddenPoster] = useState(false)
+    let moviePosters = [
+        'landingPagePosters/poster_1.jpg',
+        'landingPagePosters/poster_2.jpg',
+        'landingPagePosters/poster_3.jpg',
+        'landingPagePosters/poster_4.jpg',
+        'landingPagePosters/poster_5.jpg',
+    ]
+
+    useEffect(() => {
+        let interval, index = 0
+        const changePosters = () => {
+            interval = setInterval(() => {
+                setHiddenPoster(true)
+                setTimeout(() => {
+                    setMoviePoster(moviePosters[++index])
+                    setTimeout(() => {
+                        setHiddenPoster(false)
+                    }, 10)
+                }, 520)
+                if(index === moviePosters.length - 1) index = 0
+            }, 5000)
+        }
+        changePosters()
+        return () => {
+            clearInterval(interval)
+        }
+    }, [])
+
     return (
         <div id="landing-page">
             <h1>Movie Finder</h1>
             <p>The site which helps you decide on what to watch with your friends</p>
             <div id="photo-loader">
-                <img src="https://m.media-amazon.com/images/M/MV5BODg5ZTNmMTUtYThlNy00NjljLWE0MGUtYmQ1NDg4NWU5MjQ1XkEyXkFqcGc@._V1_.jpg" width={300} height={400}/>
+                <img src={moviePoster} className={hiddenPoster ? 'hidden' : ''}/>
             </div>
             <div id="play-buttons">
                 <button id="join-room-btn" onClick={() => navigate('/joinRoom')}>Join</button>
