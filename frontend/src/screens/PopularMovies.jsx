@@ -59,6 +59,17 @@ function PopularMovies() {
                 setLoading(false)
             }
         }
+
+        if(socket.connected) {
+            const oldRoom = JSON.parse(sessionStorage.getItem('room'))
+            if(oldRoom) {
+                socket.emit('deleteRoom', oldRoom.code, () => {
+                    socket.disconnect()
+                    sessionStorage.removeItem('room')
+                })
+            }
+        }
+
         loadPopularMovies()
     }, [])
 

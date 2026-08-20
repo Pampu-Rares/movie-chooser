@@ -12,12 +12,11 @@ function CreateRoom() {
     const handleFormSubmit = (e) => {
         e.preventDefault()
         setShowDialog(true)
-        //
     }
 
     const handleNameEnter = () => {
         if(!username.trim().length) alert('Enter a valid username')
-            else navigate('/manageRoom?username=' + encodeURIComponent(username) + '&isAdmin=true')
+            else navigate('/manageRoom?username=' + encodeURIComponent(username))
     }
 
     return (

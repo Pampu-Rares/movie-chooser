@@ -79,9 +79,9 @@ function JoinedRoom() {
                     <p>Room code:</p>
                     <p id='room-code'>{roomCode}</p>
                 </div>
-                <RoomUsers users={users} />
+                <RoomUsers users={users} isAdmin={false} />
             </div>
-            <div id='kicked-out-dialog' className={!kickedOut ? hidden : ''}>
+            <div id='kicked-out-dialog' className={!kickedOut ? 'hidden' : ''}>
                 <h3>Kicked out</h3>
                 <p id='kick-explanation'>The admin kicked you out of the room. Return to the join room menu?</p>
                 <button id='return-from-kick' onClick={() => {navigate('/joinRoom')}}>Return</button>

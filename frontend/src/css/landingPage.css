@@ -1,6 +1,5 @@
 #landing-page {
     flex: 1;
-    height: auto; /* do I need this? */
     padding: 20px;
 
     display: flex;
@@ -9,23 +8,22 @@
     gap: clamp(15px, 2vw, 25px);
 }
 
-h1, p, #photo-loader, #join-room-btn, #create-room-btn {
+#landing-page-title, #landing-page-desc, #landing-page #photo-loader, #landing-page #create-room-btn, #landing-page #join-room-btn {
     opacity: 1;
     transform: translateY(0);
-    animation: fade-in 1s ease back;
-
+    animation: fade-in 1s ease backwards;
 }
 
-h1 {
+#landing-page-title {
     margin: 10px 0 20px;
 }
 
-p {
+#landing-page-desc {
     animation-delay: 0.5s;
     margin: 5px;
 }
 
-#photo-loader { 
+#landing-page #photo-loader { 
     animation-delay: 1s;
     height: clamp(60px, 50vh, 600px);
     aspect-ratio: 2/3;
@@ -35,14 +33,14 @@ p {
     box-shadow: 12px 10px var(--secondary);
 }
 
-#photo-loader > img {
+#landing-page #photo-loader > img {
     height: 100%;
     width: 100%;
     object-fit: cover;
     transition: opacity 0.5s ease;
 }
 
-#play-buttons {
+#landing-page #play-buttons {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -51,7 +49,7 @@ p {
     margin-top: 10px;
 }
 
-#play-buttons button {
+#landing-page #play-buttons button {
     margin: 0;
     font-size: 1.3rem;
     font-weight: 400;
@@ -59,19 +57,19 @@ p {
     border: 3px solid var(--primary);
 }
 
-#play-buttons button:hover {
+#landing-page #play-buttons button:hover {
     transform: scale(1.05);
 }
 
-#join-room-btn {
+#landing-page #join-room-btn {
     animation-delay: 1.2s;
 }
 
-#create-room-btn {
+#landing-page #create-room-btn {
     animation-delay: 1.3s;
 }
 
-.hidden {
+#landing-page .hidden {
     opacity: 0;
 }
 

@@ -54,6 +54,9 @@ const io = new Server(server, {
     path: '/movieFinderGame/',
     cors: {
         origin: '*'
+    },
+    connectionStateRecovery: {
+        maxDisconnectionDuration: 2 * 60 * 1000
     }
 })
 
@@ -99,6 +102,7 @@ io.on('connection', async (socket) => {
 
     socket.on('getRoomUsers', (code, handleRoomUsers) => {
         const room = rooms.get(code)
+        if(!room) return ;
         handleRoomUsers(room.users)
     })
     
@@ -135,6 +139,7 @@ io.on('connection', async (socket) => {
 
     socket.on('leaveRoom', (code, leaveRoom) => {
         const oldRoom = rooms.get(code)
+        if(!oldRoom) return ;
         const newUsers = oldRoom.users.filter(user => user.id !== socket.id)
         rooms.set(code , {
             ...oldRoom,
@@ -146,15 +151,38 @@ io.on('connection', async (socket) => {
     })
     
     socket.on('kickUser', (userId, code) => {
-        const room = roomd.get(code)
+        const room = rooms.get(code)
+        if(!room) return ;
         io.to(userId).emit('kickedOut')
-        const newUsers = oldRoom.users.filter(user => user.id !== userId)
+        const newUsers = room.users.filter(user => user.id !== userId)
         rooms.set(code, {
             ...room,
             users: newUsers
         })
         userRooms.delete(userId)
-        socket.to(code).emit('userLeft', userId, newUsers) // maybe i should implement a different message to emit
+        io.to(code).emit('userLeft', userId, newUsers) // maybe i should implement a different message to emit
+    })
+
+    socket.on('rejoinAdmin', (code, oldId) => {
+        const oldRoom = rooms.get(code)
+        if(!oldRoom) return ;
+        const newUsers = oldRoom.users.map(user => {
+            let newId = user.id
+            if(user.id === oldId) newId = socket.id
+            return ({
+                id: newId,
+                name: user.name
+            })
+        })
+        rooms.set(code, {
+            ...oldRoom,
+            users: newUsers,
+            admin: socket.id
+        })
+        console.log(newUsers)
+        userRooms.delete(oldId)
+        userRooms.set(socket.id, code)
+        io.to(code).emit('userJoin', socket.id, newUsers)
     })
 
     socket.on('deleteRoom', (code, handleAdminDeletion) => {
@@ -169,7 +197,7 @@ io.on('connection', async (socket) => {
         handleAdminDeletion()
         io.in(code).socketsLeave(code)
     })
-
     socket.on('disconnect', () => {
+        console.log('Disconected: ' +  socket.id)
     })
 })

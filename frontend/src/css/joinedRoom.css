@@ -6,7 +6,7 @@
     width: 95%;
 }
 
-#leave-room-btn {
+#joined-room-container #leave-room-btn {
     width: fit-content;
     align-self: flex-end;
 }
@@ -14,14 +14,29 @@
 #kicked-out-dialog {
     position: absolute;
     inset: 0;
-    width: fit-content;
+    width: clamp(60px, 70%, 600px);
     height: fit-content;
     margin: auto;
+
+    background-color: var(--secondary);
+    color: var(--text-color);
+    padding: 20px;
+    border-radius: 20px;
+    border: var(--on-primary) 3px solid;
 
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+}
+
+#kicked-out-dialog button {
+    width: fit-content;
+    padding-left: 40px;
+    padding-right: 40px;
+
+    background-color: var(--primary);
+    color: var(--on-primary)
 }
 
 .hidden {

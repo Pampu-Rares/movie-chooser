@@ -34,6 +34,17 @@ function JoinRoom() {
         }
     }
 
+    useEffect(() => {
+        if(socket.connected) {
+            const oldRoom = JSON.parse(sessionStorage.getItem('room'))
+            if(oldRoom) {
+                socket.emit('deleteRoom', oldRoom.code, () => {
+                    sessionStorage.removeItem('room')
+                })
+            }
+        }
+    }, [])
+
     return (
         <>
             <h1>Join Room</h1>
