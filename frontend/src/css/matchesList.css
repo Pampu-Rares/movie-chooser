@@ -4,11 +4,21 @@
     align-items: center;
 }
 
-#matches-list {
+#matches-container #matches-list {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
     gap: 20px;
+}
+
+#play-again-btn {
+    margin-top: 30px;
+    margin-bottom: 30px;
+    width: fit-content;
+    padding: 20px 40px;
+
+    background-color: var(--primary);
+    color: var(--on-primary);
 }

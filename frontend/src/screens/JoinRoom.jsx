@@ -19,6 +19,10 @@ function JoinRoom() {
         const executeJoin = () => {
             socket.emit('joinRoom', roomCode, username, (isSuccess) => {
                 if(isSuccess) {
+                    sessionStorage.setItem('joinedRoom', JSON.stringify({
+                        code: roomCode,
+                        id: socket.id
+                    }))
                     navigate('/joinedRoom?username=' + encodeURIComponent(username) + '&roomCode=' + roomCode)
                 } else {
                     alert('The room code you entered is invalid')
@@ -35,12 +39,26 @@ function JoinRoom() {
     }
 
     useEffect(() => {
-        if(socket.connected) {
-            const oldRoom = JSON.parse(sessionStorage.getItem('room'))
-            if(oldRoom) {
+        const oldRoom = JSON.parse(sessionStorage.getItem('room'))
+        const oldJoinedRoom = JSON.parse(sessionStorage.getItem('joinedRoom'))
+        if(oldRoom) {
+            if(socket.connected) {
                 socket.emit('deleteRoom', oldRoom.code, () => {
+                    socket.disconnect()
                     sessionStorage.removeItem('room')
                 })
+            } else {
+                sessionStorage.removeItem('room')
+            }
+        }
+        if(oldJoinedRoom) {
+            if(socket.connected) {
+                socket.emit('leaveRoom', oldJoinedRoom.code, () => {
+                    socket.disconnect()
+                    sessionStorage.removeItem('joinedRoom')
+                })
+            } else {
+                sessionStorage.removeItem('joinedRoom')
             }
         }
     }, [])

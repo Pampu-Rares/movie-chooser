@@ -1,7 +1,6 @@
 import '../css/chooseMovieContainer.css'
 import { socket } from "../services/socketLogic.js"
 import { useState, useEffect} from 'react'
-import MovieCard from "../components/MovieCard.jsx"
 import MovieSelector from '../components/MovieSelector.jsx'
 import MatchDialog from "../components/MatchDialog.jsx"
 import MatchesList from '../components/MatchesList.jsx'
@@ -41,11 +40,13 @@ function ChooseMovieGame() {
 
         const handleMatch = movieId => {
           const movieMatch = movies.find(movie => movie.id === movieId)
-          setMatchesList(prev => [...prev, movieMatch])
-          setCurrentMatch({
-            isMatch: true,
-            movie: movieMatch
-          })
+          if(!matchesList.includes(movieMatch)) {
+            setMatchesList(prev => [...prev, movieMatch])
+            setCurrentMatch({
+              isMatch: true,
+              movie: movieMatch
+            })
+          }
         }
 
         socket.on('movies', handleMovies)
@@ -70,17 +71,21 @@ function ChooseMovieGame() {
       setLike(true)
       socket.emit('likedMovie', currentMovieOption.movie.id, roomCode)
       setTimeout(() => {
-          setLike(false)
           nextMovie()
-      }, 750)
+          setTimeout(() => {
+            setLike(false)
+          }, 250)
+      }, 500)
     }
 
     const handleDislike = () => {
         setDislike(true)
         setTimeout(() => {
-            setDislike(false)
             nextMovie()
-        }, 750)
+            setTimeout(() => {
+            setDislike(false)
+            }, 250)
+        }, 500)
     }
 
     const skipMatch = () => {
@@ -100,7 +105,7 @@ function ChooseMovieGame() {
         <>
           <div id='game-container' className={currentMatch.isMatch ? 'blur' : ''}>
               <p>Socket id: {socket.id}</p>
-              {movies && movies.length && (currentMovieOption.index >= movies.length ? <MatchesList matches={matchesList}/> : <MovieSelector movie={currentMovieOption.movie} handleDislike={handleDislike} handleLike={handleLike} like={like} dislike={dislike}/>)}
+              {movies && movies.length && (currentMovieOption.index >= movies.length ? <MatchesList matches={matchesList} roomCode={roomCode}/> : <MovieSelector movie={currentMovieOption.movie} handleDislike={handleDislike} handleLike={handleLike} like={like} dislike={dislike}/>)}
           </div>
           <MatchDialog match={currentMatch} skipMatch={skipMatch}/>
         </>

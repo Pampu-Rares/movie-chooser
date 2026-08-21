@@ -38,7 +38,12 @@ function RoomManager() {
             if(sessionRoom) {
                 // implement admin rejoin
 
-                socket.emit('rejoinAdmin', sessionRoom.code, sessionRoom.id)
+                socket.emit('rejoinAdmin', sessionRoom.code, sessionRoom.id, () => {
+                    sessionStorage.setItem('room', JSON.stringify({
+                        ...sessionRoom,
+                        id: socket.id
+                    }))
+                })
             } else {
                 socket.emit('createRoom', username, (code) => {
                     setRoomCode(code)
@@ -53,6 +58,7 @@ function RoomManager() {
         }
 
         const handleUsers = (userId, users) => {
+            console.log(users)
             setUsers(users)
         }
 

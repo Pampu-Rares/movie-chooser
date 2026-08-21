@@ -60,14 +60,27 @@ function PopularMovies() {
             }
         }
 
-        if(socket.connected) {
-            const oldRoom = JSON.parse(sessionStorage.getItem('room'))
-            if(oldRoom) {
-                socket.emit('deleteRoom', oldRoom.code, () => {
-                    socket.disconnect()
+        const oldRoom = JSON.parse(sessionStorage.getItem('room'))
+        const oldJoinedRoom = JSON.parse(sessionStorage.getItem('joinedRoom'))
+        if(oldRoom) {
+                if(socket.connected) {
+                    socket.emit('deleteRoom', oldRoom.code, () => {
+                        socket.disconnect()
+                        sessionStorage.removeItem('room')
+                    })
+                } else {
                     sessionStorage.removeItem('room')
-                })
-            }
+                }
+        }
+        if(oldJoinedRoom) {
+                if(socket.connected) {
+                    socket.emit('leaveRoom', oldJoinedRoom.code, () => {
+                        socket.disconnect()
+                        sessionStorage.removeItem('joinedRoom')
+                    })
+                } else {
+                    sessionStorage.removeItem('joinedRoom')
+                }
         }
 
         loadPopularMovies()

@@ -163,7 +163,7 @@ io.on('connection', async (socket) => {
         io.to(code).emit('userLeft', userId, newUsers) // maybe i should implement a different message to emit
     })
 
-    socket.on('rejoinAdmin', (code, oldId) => {
+    socket.on('rejoinAdmin', (code, oldId, handleRejoin) => {
         const oldRoom = rooms.get(code)
         if(!oldRoom) return ;
         const newUsers = oldRoom.users.map(user => {
@@ -179,9 +179,44 @@ io.on('connection', async (socket) => {
             users: newUsers,
             admin: socket.id
         })
-        console.log(newUsers)
+        console.log({
+            ...oldRoom,
+            users: newUsers,
+            admin: socket.id
+        })
         userRooms.delete(oldId)
         userRooms.set(socket.id, code)
+        socket.join(code)
+        handleRejoin()
+        io.to(code).emit('userJoin', socket.id, newUsers)
+    })
+
+    socket.on('rejoinRoom', (code, oldId, handleRejoin) => {
+        const oldRoom = rooms.get(code)
+        if(!oldRoom) {
+            console.log('room not found')
+            return ;
+        }
+        const newUsers = oldRoom.users.map(user => {
+            let newId = user.id
+            if(user.id === oldId) newId = socket.id
+            return ({
+                id: newId,
+                name: user.name
+            })
+        })
+        rooms.set(code, {
+            ...oldRoom,
+            users: newUsers
+        })
+        console.log({
+            ...oldRoom,
+            users: newUsers
+        })
+        userRooms.delete(oldId)
+        userRooms.set(socket.id, code)
+        socket.join(code)
+        handleRejoin()
         io.to(code).emit('userJoin', socket.id, newUsers)
     })
 
@@ -197,6 +232,7 @@ io.on('connection', async (socket) => {
         handleAdminDeletion()
         io.in(code).socketsLeave(code)
     })
+
     socket.on('disconnect', () => {
         console.log('Disconected: ' +  socket.id)
     })

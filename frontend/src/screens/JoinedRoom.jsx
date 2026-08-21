@@ -7,7 +7,7 @@ import RoomUsers from '../components/RoomUsers.jsx'
 function JoinedRoom() {
     const navigate = useNavigate()
     const [searchParams] = useSearchParams()
-    const username = decodeURIComponent(searchParams.get('username'))
+    const username = decodeURIComponent(searchParams.get('username')) // dont need username but i am too lazy to remove it
     const roomCode = searchParams.get('roomCode')
 
     const [users, setUsers] = useState([])
@@ -19,6 +19,25 @@ function JoinedRoom() {
             navigate('/joinRoom')
         })
     }
+
+    useEffect(() => {
+        const handleConnection = () => {
+            setSocketId(socket.id)
+            const previouslyJoinedRoom = JSON.parse(sessionStorage.getItem('joinedRoom'))
+            if(previouslyJoinedRoom && previouslyJoinedRoom.id !== socket.id) {
+                socket.emit('rejoinRoom', previouslyJoinedRoom.code, previouslyJoinedRoom.id, () => {
+                    sessionStorage.setItem('joinedRoom', JSON.stringify({
+                        ...previouslyJoinedRoom,
+                        id: socket.id
+                    }))
+                })
+            }
+        }
+        if(!socket.connected) {
+            socket.connect()
+            socket.once('connect', handleConnection)
+        } else handleConnection()
+    }, [])
 
     useEffect(() => {
         const handleRoomUsers = (users) => {
@@ -45,9 +64,11 @@ function JoinedRoom() {
 
     useEffect(() => {
         const handleDeletedRoom = () => {
+            sessionStorage.removeItem('joinedRoom')
             navigate('/joinRoom')
         }
         const handleKick = () => {
+            sessionStorage.removeItem('joinedRoom')
             setKickedOut(true)
         }
         socket.on('deletedRoom', handleDeletedRoom)
