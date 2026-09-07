@@ -115,6 +115,7 @@ io.on('connection', async (socket) => {
             const currentRoom = rooms.get(room)
             rooms.set(room, {
                 ...currentRoom,
+                movies: movies,
                 likedMovies: likedMovies
             })
             io.to(room).emit('movies', movies)
@@ -126,6 +127,10 @@ io.on('connection', async (socket) => {
 
     socket.on('likedMovie', (movieId, code) => {
         const currentRoom = rooms.get(code)
+        if(!currentRoom) {
+            io.to(code).emit('deletedRoom')
+            return ;
+        } 
         const updatedLikedMovies = currentRoom.likedMovies
         updatedLikedMovies[movieId] += 1
 
@@ -181,16 +186,15 @@ io.on('connection', async (socket) => {
             users: newUsers,
             admin: socket.id
         })
-        console.log({
-            ...oldRoom,
-            users: newUsers,
-            admin: socket.id
-        })
         userRooms.delete(oldId)
         userRooms.set(socket.id, code)
         socket.join(code)
         handleRejoin()
         io.to(code).emit('userJoin', socket.id, newUsers)
+        //might be an issue here
+        if(oldRoom.movies) {
+            socket.emit('movies', oldRoom.movies)
+        }
     })
 
     socket.on('rejoinRoom', (code, oldId, handleRejoin) => {
@@ -211,15 +215,16 @@ io.on('connection', async (socket) => {
             ...oldRoom,
             users: newUsers
         })
-        console.log({
-            ...oldRoom,
-            users: newUsers
-        })
         userRooms.delete(oldId)
         userRooms.set(socket.id, code)
         socket.join(code)
         handleRejoin()
         io.to(code).emit('userJoin', socket.id, newUsers)
+        /* until i fix the initial admin bug
+        if(oldRoom.movies) {
+            socket.emit('movies', oldRoom.movies)
+        }
+        */
     })
 
     socket.on('deleteRoom', (code, handleAdminDeletion) => {

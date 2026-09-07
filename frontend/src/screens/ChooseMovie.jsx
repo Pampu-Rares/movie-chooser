@@ -18,6 +18,7 @@ function ChooseMovieGame() {
     const [searchParams] = useSearchParams()
     const roomCode = searchParams.get('roomCode')
 
+    const [socketId, setSocketId] = useState(socket.id)
     const [movies, setMovies] = useState([])
     const [currentMovieOption, setCurrentMovieOption] = useState({index: 0, movie: null})
     const [like, setLike] = useState(false)
@@ -41,6 +42,37 @@ function ChooseMovieGame() {
       return () => {
         socket.off('deletedRoom', handleRoomDeletion)
       }
+    }, [])
+
+    //refresh disconnection edge case
+    useEffect(() => {
+        const handleConnection = () => {
+            setSocketId(socket.id)
+            let roomAdmin = sessionStorage.getItem('room')
+            if(roomAdmin) {
+              roomAdmin = JSON.parse(roomAdmin)
+              socket.emit('rejoinAdmin', roomAdmin.code, roomAdmin.id, () => {
+                  sessionStorage.setItem('room', JSON.stringify({
+                      ...roomAdmin,
+                      id: socket.id
+                  }))
+              })
+              return ;
+            }
+            const previouslyJoinedRoom = JSON.parse(sessionStorage.getItem('joinedRoom'))
+            if(previouslyJoinedRoom && previouslyJoinedRoom.id !== socket.id) {
+                socket.emit('rejoinRoom', previouslyJoinedRoom.code, previouslyJoinedRoom.id, () => {
+                    sessionStorage.setItem('joinedRoom', JSON.stringify({
+                        ...previouslyJoinedRoom,
+                        id: socket.id
+                    }))
+                })
+            }
+        }
+        if(!socket.connected) {
+            socket.connect()
+            socket.once('connect', handleConnection)
+        }
     }, [])
 
     useEffect(() => {
@@ -126,7 +158,7 @@ function ChooseMovieGame() {
     return (
         <>
           <div id='game-container' className={currentMatch.isMatch ? 'blur' : ''}>
-              <p>Socket id: {socket.id}</p>
+              <p>Socket id: {socketId}</p>
               {movies && movies.length && (currentMovieOption.index >= movies.length ? <MatchesList matches={matchesList} roomCode={roomCode}/> : <MovieSelector movie={currentMovieOption.movie} handleDislike={handleDislike} handleLike={handleLike} like={like} dislike={dislike}/>)}
           </div>
           <MatchDialog match={currentMatch} skipMatch={skipMatch}/>

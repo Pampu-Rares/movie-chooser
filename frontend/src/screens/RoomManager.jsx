@@ -18,6 +18,7 @@ function RoomManager() {
     const handleRoomDelete = () => {
         sessionStorage.removeItem('room')
         socket.emit('deleteRoom', roomCode, () => {
+            socket.disconnect()
             navigate('/')
         })
     }
