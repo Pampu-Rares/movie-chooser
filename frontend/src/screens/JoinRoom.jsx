@@ -26,6 +26,7 @@ function JoinRoom() {
                     navigate('/joinedRoom?username=' + encodeURIComponent(username) + '&roomCode=' + roomCode)
                 } else {
                     alert('The room code you entered is invalid')
+                    socket.disconnect()
                 }
             })
         }

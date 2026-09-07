@@ -43,7 +43,7 @@ function MatchesList({ matches, roomCode}) {
             ) : (
                 <>
                     <div id='matches-list'>
-                        {matches.map(movie => <MovieCard movie={movie} key={movie.id} />)}
+                        {matches.map(movie => (movie && <MovieCard movie={movie} key={movie.id} />))}
                     </div>
                     {isAdmin && <button id='play-again-btn' onClick={handlePlayAgain}>Play Again</button> }
                 </>

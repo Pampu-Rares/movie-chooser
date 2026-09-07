@@ -24,7 +24,7 @@ function CreateRoom() {
             <h1>Create Room</h1>
             <form id='create-room-form' onSubmit={handleFormSubmit}>
                 <div id='password-container'>
-                    <label htmlFor='password'>Room password</label>
+                    <label htmlFor='room-password'>Room password</label>
                     <input id='room-password' type='text' maxLength={20} placeholder='Optional'></input>
                 </div>
                 <p id='ms-label'>Movie Source</p>

@@ -133,6 +133,8 @@ io.on('connection', async (socket) => {
             ...currentRoom,
             likedMovies: updatedLikedMovies
         }
+        console.log(updatedLikedMovies)
+        rooms.set(code, updatedRoom) // not sure why this was missing
         if(updatedLikedMovies[movieId] > Math.floor(currentRoom.users.length / 2))
             io.to(code).emit('match', movieId)
     })

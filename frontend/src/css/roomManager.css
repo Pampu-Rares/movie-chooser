@@ -7,7 +7,7 @@
     margin-top: 20px;
 }
 
-#delete-room {
+#room-manager-container #delete-room {
     background-color: red;
     color: white;
 
@@ -34,7 +34,7 @@
     }
 
     p:first-of-type {
-        font-size: 1.1rem;
+        font-size: 1.4rem;
         color: var(--on-primary);
     }
 }
@@ -46,7 +46,7 @@
     border-radius: 20px;
 }
 
-#play {
+#room-manager-container #play {
     margin-top: 15px;
     width: 93%;
 

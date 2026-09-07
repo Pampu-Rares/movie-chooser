@@ -98,6 +98,11 @@
     flex-direction: row;
     align-items: center;
     gap: 10px;
+
+    p {
+        margin-right: 0;
+        text-align: center;
+    }
 }
 
 #create-room-container #personal-options-checkbox {
@@ -118,6 +123,7 @@
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: center;
     flex-wrap: wrap;
     gap: 10px;
 }

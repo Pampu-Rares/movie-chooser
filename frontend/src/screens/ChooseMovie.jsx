@@ -27,11 +27,33 @@ function ChooseMovieGame() {
       movie: null
     })
     const [matchesList, setMatchesList] = useState([])
+    const [roundsPlayed, setRoundsPlayed] = useState(0)
+
+    //room deletion edge case
+    useEffect(() => {
+      const handleRoomDeletion = () => {
+        sessionStorage.removeItem('joinedRoom')
+        navigate('/joinRoom')
+      }
+
+      socket.on('deletedRoom', handleRoomDeletion)
+
+      return () => {
+        socket.off('deletedRoom', handleRoomDeletion)
+      }
+    }, [])
 
     useEffect(() => {
         const handleMovies = (movies) => {
           const shuffledMovies = shuffleMovies(movies)
+          console.log(shuffledMovies)
           setMovies(shuffledMovies)
+          setMatchesList([])
+          setRoundsPlayed(1)
+          setCurrentMatch({
+            isMatch: false,
+            movie: null
+          })
           setCurrentMovieOption({
             index: 0,
             movie: shuffledMovies[0]
@@ -40,6 +62,7 @@ function ChooseMovieGame() {
 
         const handleMatch = movieId => {
           const movieMatch = movies.find(movie => movie.id === movieId)
+          console.log(matchesList.length)
           if(!matchesList.includes(movieMatch)) {
             setMatchesList(prev => [...prev, movieMatch])
             setCurrentMatch({
@@ -55,9 +78,8 @@ function ChooseMovieGame() {
         return () => {
             socket.off('movies', handleMovies)
             socket.off('match', handleMatch)
-
         }
-    }, [movies.length, matchesList.length])
+    }, [movies.length, matchesList.length, roundsPlayed])
 
     const nextMovie = () => {
         const newIndex = currentMovieOption.index + 1
