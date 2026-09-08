@@ -82,6 +82,7 @@ function PopularMovies() {
                     sessionStorage.removeItem('joinedRoom')
                 }
         }
+        sessionStorage.removeItem('votedMovies')
 
         loadPopularMovies()
     }, [])

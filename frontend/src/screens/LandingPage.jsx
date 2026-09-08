@@ -52,6 +52,7 @@ function LandingPage() {
                     sessionStorage.removeItem('joinedRoom')
                 }
         }
+        sessionStorage.removeItem('votedMovies')
 
         changePosters()
         return () => {

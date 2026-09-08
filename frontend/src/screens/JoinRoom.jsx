@@ -62,6 +62,7 @@ function JoinRoom() {
                 sessionStorage.removeItem('joinedRoom')
             }
         }
+        sessionStorage.removeItem('votedMovies')
     }, [])
 
     return (

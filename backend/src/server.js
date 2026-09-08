@@ -118,7 +118,7 @@ io.on('connection', async (socket) => {
                 movies: movies,
                 likedMovies: likedMovies
             })
-            io.to(room).emit('movies', movies)
+            io.to(room).emit('movies', movies, true)
         } catch(err) {
             socket.emit('api-error')
             console.log('Error: ' + err.message || err)
@@ -186,6 +186,7 @@ io.on('connection', async (socket) => {
             users: newUsers,
             admin: socket.id
         })
+        console.log(newUsers)
         userRooms.delete(oldId)
         userRooms.set(socket.id, code)
         socket.join(code)
@@ -193,7 +194,7 @@ io.on('connection', async (socket) => {
         io.to(code).emit('userJoin', socket.id, newUsers)
         //might be an issue here
         if(oldRoom.movies) {
-            socket.emit('movies', oldRoom.movies)
+            socket.emit('movies', oldRoom.movies, false)
         }
     })
 
@@ -220,11 +221,9 @@ io.on('connection', async (socket) => {
         socket.join(code)
         handleRejoin()
         io.to(code).emit('userJoin', socket.id, newUsers)
-        /* until i fix the initial admin bug
         if(oldRoom.movies) {
-            socket.emit('movies', oldRoom.movies)
+            socket.emit('movies', oldRoom.movies, false)
         }
-        */
     })
 
     socket.on('deleteRoom', (code, handleAdminDeletion) => {

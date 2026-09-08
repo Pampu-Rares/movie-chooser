@@ -70,6 +70,7 @@ function RoomManager() {
         if(!socket.connected) {
             socket.connect()
         } else handleConnection()
+        sessionStorage.removeItem('votedMovies')
 
         return () => {
             socket.off('connect', handleConnection)

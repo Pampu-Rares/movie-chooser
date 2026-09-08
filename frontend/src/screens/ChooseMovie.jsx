@@ -76,8 +76,20 @@ function ChooseMovieGame() {
     }, [])
 
     useEffect(() => {
-        const handleMovies = (movies) => {
-          const shuffledMovies = shuffleMovies(movies)
+        const handleMovies = (movies, isNewRound) => {
+          if(isNewRound) sessionStorage.removeItem('votedMovies') // should also make sure to remove it from other pages
+          console.log('is new round: ', isNewRound, ', movies: ', movies)
+          const votedMovies = JSON.parse(sessionStorage.getItem('votedMovies'))
+          let actualMovies = movies
+          if(votedMovies) {
+            actualMovies = movies.filter(movie => {
+              for(let votedMovieId of votedMovies) {
+                if(movie.id === votedMovieId) return false
+              }
+              return true
+            })
+          }  // test all of this
+          const shuffledMovies = shuffleMovies(actualMovies)
           console.log(shuffledMovies)
           setMovies(shuffledMovies)
           setMatchesList([])
@@ -124,6 +136,9 @@ function ChooseMovieGame() {
     const handleLike = () => {
       setLike(true)
       socket.emit('likedMovie', currentMovieOption.movie.id, roomCode)
+      const votedMovies = JSON.parse(sessionStorage.getItem('votedMovies')) || []
+      votedMovies.push(currentMovieOption.movie.id)
+      sessionStorage.setItem('votedMovies', JSON.stringify(votedMovies))
       setTimeout(() => {
           nextMovie()
           setTimeout(() => {
@@ -134,6 +149,9 @@ function ChooseMovieGame() {
 
     const handleDislike = () => {
         setDislike(true)
+        const votedMovies = JSON.parse(sessionStorage.getItem('votedMovies')) || []
+        votedMovies.push(currentMovieOption.movie.id)
+        sessionStorage.setItem('votedMovies', JSON.stringify(votedMovies))
         setTimeout(() => {
             nextMovie()
             setTimeout(() => {
