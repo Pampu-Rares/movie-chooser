@@ -20,6 +20,7 @@ function ChooseMovieGame() {
 
     const [socketId, setSocketId] = useState(socket.id)
     const [movies, setMovies] = useState([])
+    const [allMovies, setAllMovies] = useState([])
     const [currentMovieOption, setCurrentMovieOption] = useState({index: 0, movie: null})
     const [like, setLike] = useState(false)
     const [dislike, setDislike] = useState(false)
@@ -29,20 +30,8 @@ function ChooseMovieGame() {
     })
     const [matchesList, setMatchesList] = useState([])
     const [roundsPlayed, setRoundsPlayed] = useState(0)
+    const [waitingForOthers, setWaitingForOthers] = useState(false)
 
-    //room deletion edge case
-    useEffect(() => {
-      const handleRoomDeletion = () => {
-        sessionStorage.removeItem('joinedRoom')
-        navigate('/joinRoom')
-      }
-
-      socket.on('deletedRoom', handleRoomDeletion)
-
-      return () => {
-        socket.off('deletedRoom', handleRoomDeletion)
-      }
-    }, [])
 
     //refresh disconnection edge case
     useEffect(() => {
@@ -74,26 +63,45 @@ function ChooseMovieGame() {
             socket.once('connect', handleConnection)
         }
     }, [])
+    
+    //room deletion edge case
+    useEffect(() => {
+      const handleRoomDeletion = () => {
+        sessionStorage.removeItem('joinedRoom')
+        navigate('/joinRoom')
+      }
+
+      socket.on('deletedRoom', handleRoomDeletion)
+
+      return () => {
+        socket.off('deletedRoom', handleRoomDeletion)
+      }
+    }, [])
 
     useEffect(() => {
         const handleMovies = (movies, isNewRound) => {
-          if(isNewRound) sessionStorage.removeItem('votedMovies') // should also make sure to remove it from other pages
-          console.log('is new round: ', isNewRound, ', movies: ', movies)
+          console.log('Received movies')
+          if(isNewRound) {
+            sessionStorage.removeItem('votedMovies') // should also make sure to remove it from other pages
+            setMatchesList([])
+          }
+          setAllMovies(movies)
+          console.log(movies)
           const votedMovies = JSON.parse(sessionStorage.getItem('votedMovies'))
           let actualMovies = movies
           if(votedMovies) {
             actualMovies = movies.filter(movie => {
               for(let votedMovieId of votedMovies) {
                 if(movie.id === votedMovieId) return false
-              }
-              return true
+            }
+            if(!actualMovies.length) setWaitingForOthers(true)
+            return true // not sure why I return true, maybe I'm just retarded
             })
           }  // test all of this
           const shuffledMovies = shuffleMovies(actualMovies)
-          console.log(shuffledMovies)
+          //console.log(shuffledMovies)
           setMovies(shuffledMovies)
-          setMatchesList([])
-          setRoundsPlayed(1)
+          setRoundsPlayed(1) // do i need to reset it?
           setCurrentMatch({
             isMatch: false,
             movie: null
@@ -106,14 +114,10 @@ function ChooseMovieGame() {
 
         const handleMatch = movieId => {
           const movieMatch = movies.find(movie => movie.id === movieId)
-          console.log(matchesList.length)
-          if(!matchesList.includes(movieMatch)) {
-            setMatchesList(prev => [...prev, movieMatch])
-            setCurrentMatch({
-              isMatch: true,
-              movie: movieMatch
-            })
-          }
+          setCurrentMatch({
+            isMatch: true,
+            movie: movieMatch
+          })
         }
 
         socket.on('movies', handleMovies)
@@ -123,14 +127,36 @@ function ChooseMovieGame() {
             socket.off('movies', handleMovies)
             socket.off('match', handleMatch)
         }
-    }, [movies.length, matchesList.length, roundsPlayed])
+    }, [movies.length, roundsPlayed])
+
+    //final matches list
+    useEffect(() => {
+
+      const handleMatchesList = (matches) => {
+        console.log('Received matches')
+        console.log(allMovies)
+        setMatchesList(matches.map(movieId => {
+          for(const movie of allMovies)
+            if(movieId === movie.id) return movie
+        }))
+      }
+      
+      socket.on('matches-list', handleMatchesList)
+      return () => {
+        socket.off('matches-list', handleMatchesList)
+      }
+    }, [allMovies.length])
 
     const nextMovie = () => {
         const newIndex = currentMovieOption.index + 1
         setCurrentMovieOption({
             index: newIndex,
-            movie: movies[newIndex]
+            movie: movies[newIndex] || null
         })
+        if(newIndex >= movies.length) {
+          setWaitingForOthers(true)
+          socket.emit('finishedVoting', roomCode)
+        }
     }
 
     const handleLike = () => {
@@ -177,7 +203,15 @@ function ChooseMovieGame() {
         <>
           <div id='game-container' className={currentMatch.isMatch ? 'blur' : ''}>
               <p>Socket id: {socketId}</p>
-              {movies && movies.length && (currentMovieOption.index >= movies.length ? <MatchesList matches={matchesList} roomCode={roomCode}/> : <MovieSelector movie={currentMovieOption.movie} handleDislike={handleDislike} handleLike={handleLike} like={like} dislike={dislike}/>)}
+              {matchesList.length ? (
+                <MatchesList matches={matchesList} roomCode={roomCode}/>
+              ) : waitingForOthers ? (
+                  <div id='waiting-others'>
+                    <h3>Waiting for the others to finish</h3>
+                  </div>
+                ) : (
+                movies && movies.length && <MovieSelector movie={currentMovieOption.movie} handleDislike={handleDislike} handleLike={handleLike} like={like} dislike={dislike}/>
+                )}
           </div>
           <MatchDialog match={currentMatch} skipMatch={skipMatch}/>
         </>

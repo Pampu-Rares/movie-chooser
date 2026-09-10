@@ -116,7 +116,9 @@ io.on('connection', async (socket) => {
             rooms.set(room, {
                 ...currentRoom,
                 movies: movies,
-                likedMovies: likedMovies
+                likedMovies: likedMovies,
+                matches: [],
+                finishedVoting: 0
             })
             io.to(room).emit('movies', movies, true)
         } catch(err) {
@@ -133,15 +135,33 @@ io.on('connection', async (socket) => {
         } 
         const updatedLikedMovies = currentRoom.likedMovies
         updatedLikedMovies[movieId] += 1
-
+        const matches = currentRoom.matches
+        if(updatedLikedMovies[movieId] > Math.floor(currentRoom.users.length / 2)) {
+            io.to(code).emit('match', movieId)
+            matches.push(movieId)
+        }
         const updatedRoom = {
             ...currentRoom,
-            likedMovies: updatedLikedMovies
+            likedMovies: updatedLikedMovies,
+            matches: matches
         }
-        console.log(updatedLikedMovies)
-        rooms.set(code, updatedRoom) // not sure why this was missing
-        if(updatedLikedMovies[movieId] > Math.floor(currentRoom.users.length / 2))
-            io.to(code).emit('match', movieId)
+        rooms.set(code, updatedRoom)
+    })
+
+    socket.on('finishedVoting', (code) => {
+        const currentRoom = rooms.get(code)
+        if(!currentRoom) {
+            io.to(code).emit('deletedRoom')
+            return ;
+        }
+        const updatedFinishedVoting = currentRoom.finishedVoting + 1
+        rooms.set(code, {
+            ...currentRoom,
+            finishedVoting: updatedFinishedVoting
+        })
+        console.log('finished: ', updatedFinishedVoting)
+        console.log('Room length: ', currentRoom.users.length)
+        if(updatedFinishedVoting === currentRoom.users.length) io.to(code).emit('matches-list', currentRoom.matches)
     })
 
     socket.on('leaveRoom', (code, leaveRoom) => {
@@ -195,6 +215,10 @@ io.on('connection', async (socket) => {
         //might be an issue here
         if(oldRoom.movies) {
             socket.emit('movies', oldRoom.movies, false)
+            if(oldRoom.finishedVoting === newUsers.length) 
+                setTimeout(() => {  // not the best approach
+                socket.emit('matches-list', oldRoom.matches)
+                }, 300)
         }
     })
 
@@ -223,6 +247,10 @@ io.on('connection', async (socket) => {
         io.to(code).emit('userJoin', socket.id, newUsers)
         if(oldRoom.movies) {
             socket.emit('movies', oldRoom.movies, false)
+            if(oldRoom.finishedVoting === newUsers.length) 
+                setTimeout(() => {  // not the best approach
+                socket.emit('matches-list', oldRoom.matches)
+                }, 300)
         }
     })
 
