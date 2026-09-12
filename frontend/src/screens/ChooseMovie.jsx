@@ -4,7 +4,7 @@ import { useState, useEffect} from 'react'
 import MovieSelector from '../components/MovieSelector.jsx'
 import MatchDialog from "../components/MatchDialog.jsx"
 import MatchesList from '../components/MatchesList.jsx'
-import { useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 
 function shuffleMovies(movies) {
     for(let i = movies.length - 1; i > 0; i--) {
@@ -15,6 +15,7 @@ function shuffleMovies(movies) {
 }
 
 function ChooseMovieGame() {
+    const navigate = useNavigate()
     const [searchParams] = useSearchParams()
     const roomCode = searchParams.get('roomCode')
 
@@ -37,9 +38,8 @@ function ChooseMovieGame() {
     useEffect(() => {
         const handleConnection = () => {
             setSocketId(socket.id)
-            let roomAdmin = sessionStorage.getItem('room')
+            const roomAdmin = JSON.parse(sessionStorage.getItem('room'))
             if(roomAdmin) {
-              roomAdmin = JSON.parse(roomAdmin)
               socket.emit('rejoinAdmin', roomAdmin.code, roomAdmin.id, () => {
                   sessionStorage.setItem('room', JSON.stringify({
                       ...roomAdmin,
@@ -60,14 +60,31 @@ function ChooseMovieGame() {
         }
         if(!socket.connected) {
             socket.connect()
-            socket.once('connect', handleConnection)
+        }
+        socket.on('connect', handleConnection)
+
+        return () => {
+          socket.off('connect', handleConnection)
         }
     }, [])
     
     //room deletion edge case
     useEffect(() => {
       const handleRoomDeletion = () => {
-        sessionStorage.removeItem('joinedRoom')
+        const oldRoom = JSON.parse(sessionStorage.getItem('room'))
+        const oldJoinedRoom = JSON.parse(sessionStorage.getItem('joinedRoom'))
+        if(oldRoom) {
+          socket.emit('deleteRoom', oldRoom.code, () => {
+            sessionStorage.removeItem('room')
+          })
+        }
+        if(oldJoinedRoom) {
+          socket.emit('leaveRoom', oldJoinedRoom.code, () => {
+            sessionStorage.removeItem('joinedRoom')
+          })
+        }
+        socket.disconnect()
+        sessionStorage.removeItem('votedMovies')
         navigate('/joinRoom')
       }
 
@@ -79,7 +96,7 @@ function ChooseMovieGame() {
     }, [])
 
     useEffect(() => {
-        const handleMovies = (movies, isNewRound) => {
+        const handleMovies = (movies, isNewRound, handleMatches) => {
           console.log('Received movies')
           if(isNewRound) {
             sessionStorage.removeItem('votedMovies') // should also make sure to remove it from other pages
@@ -90,16 +107,10 @@ function ChooseMovieGame() {
           const votedMovies = JSON.parse(sessionStorage.getItem('votedMovies'))
           let actualMovies = movies
           if(votedMovies) {
-            actualMovies = movies.filter(movie => {
-              for(let votedMovieId of votedMovies) {
-                if(movie.id === votedMovieId) return false
-            }
+            actualMovies = movies.filter(movie => !votedMovies.includes(movie.id))
             if(!actualMovies.length) setWaitingForOthers(true)
-            return true // not sure why I return true, maybe I'm just retarded
-            })
-          }  // test all of this
+          }
           const shuffledMovies = shuffleMovies(actualMovies)
-          //console.log(shuffledMovies)
           setMovies(shuffledMovies)
           setRoundsPlayed(1) // do i need to reset it?
           setCurrentMatch({
@@ -110,10 +121,12 @@ function ChooseMovieGame() {
             index: 0,
             movie: shuffledMovies[0]
           })
+          handleMatches()
         }
 
         const handleMatch = movieId => {
-          const movieMatch = movies.find(movie => movie.id === movieId)
+          const movieMatch = allMovies.find(movie => movie.id === movieId)
+          console.log('movies on match: ', movies, ' and movie id:', movieId)
           setCurrentMatch({
             isMatch: true,
             movie: movieMatch

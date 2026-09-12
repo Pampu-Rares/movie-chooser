@@ -9,3 +9,7 @@
 .blur {
     filter: blur(18px);
 }
+
+#game-container #waiting-others {
+    color: var(--text-color);
+}

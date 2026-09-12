@@ -79,6 +79,26 @@ function RoomManager() {
         }
     }, [])
 
+    useEffect(() => {
+
+        const handleDeletedRoom = () => {
+            const oldRoom = JSON.parse(sessionStorage.getItem('room'))
+            if(oldRoom) {
+                socket.emit('deleteRoom', oldRoom.code, () => {
+                })
+            }
+            sessionStorage.removeItem('room')
+            socket.disconnect()
+            sessionStorage.removeItem('votedMovies')
+            navigate('/joinRoom')
+        }
+
+        socket.on('deleted-room', handleDeletedRoom)
+        return () => {
+            socket.off('deleted-room', handleDeletedRoom)
+        }
+    })
+
     return (
         <div id='room-manager-container'>
             <button id='delete-room' onClick={handleRoomDelete}>Delete Room</button>
