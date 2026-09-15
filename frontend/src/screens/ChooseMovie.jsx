@@ -71,28 +71,26 @@ function ChooseMovieGame() {
     //room deletion edge case
     useEffect(() => {
       const handleRoomDeletion = () => {
-        const oldRoom = JSON.parse(sessionStorage.getItem('room'))
-        const oldJoinedRoom = JSON.parse(sessionStorage.getItem('joinedRoom'))
-        if(oldRoom) {
-          socket.emit('deleteRoom', oldRoom.code, () => {
-            sessionStorage.removeItem('room')
-          })
-        }
-        if(oldJoinedRoom) {
-          socket.emit('leaveRoom', oldJoinedRoom.code, () => {
-            sessionStorage.removeItem('joinedRoom')
-          })
-        }
-        socket.disconnect()
+        sessionStorage.removeItem('room') // admin's room
+        sessionStorage.removeItem('joinedRoom')
         sessionStorage.removeItem('votedMovies')
+        socket.disconnect()
         navigate('/joinRoom')
       }
 
-      socket.on('deletedRoom', handleRoomDeletion)
-
-      return () => {
-        socket.off('deletedRoom', handleRoomDeletion)
+      const handleExpiredConnection = () => {
+            sessionStorage.removeItem('room') // admin's room
+            sessionStorage.removeItem('votedMovies')
+            socket.disconnect()
+            navigate('/joinRoom')
       }
+
+        socket.on('deleted-room', handleRoomDeletion)
+        socket.on('connection-expired', handleExpiredConnection)
+        return () => {
+            socket.off('deleted-room', handleRoomDeletion)
+            socket.off('connection-expired', handleExpiredConnection)
+        }
     }, [])
 
     useEffect(() => {

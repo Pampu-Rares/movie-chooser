@@ -202,7 +202,7 @@ io.on('connection', async (socket) => {
             console.log('Admin: Reconnection successful')
         } else {
             console.log('Admin: Connection expired')
-            socket.emit('deletedRoom')
+            socket.emit('connection-expired')
             return ;
         }
         const oldRoom = rooms.get(code)
@@ -289,18 +289,21 @@ io.on('connection', async (socket) => {
     })
 
     socket.on('disconnect', () => {
-        console.log('Disconected: ' +  socket.id)
         // pendingDisconnections map
         if(userRooms.has(socket.id)) {
+            console.log('Disconected: ' +  socket.id)
             const disconnectUserTimeout = setTimeout(() => {
                 const oldRoomCode = userRooms.get(socket.id)
                 userRooms.delete(socket.id)
                 const oldRoom = rooms.get(oldRoomCode)
-                const newUsers = oldRoom.users.filter(user => user.id !== socket.id)
-                rooms.set(oldRoomCode, {
-                    ...oldRoom,
-                    users: newUsers
-                })
+                if(oldRoom.admin === socket.id) rooms.delete(oldRoomCode)
+                else {
+                    const newUsers = oldRoom.users.filter(user => user.id !== socket.id)
+                    rooms.set(oldRoomCode, {
+                        ...oldRoom,
+                        users: newUsers
+                    })
+                }
                 pendingDisconnections.delete(socket.id)
                 console.log('deleted socket id')
             }, 60 * 1000)

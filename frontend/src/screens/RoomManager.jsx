@@ -79,23 +79,18 @@ function RoomManager() {
         }
     }, [])
 
+    //connection expired edge case
     useEffect(() => {
-
-        const handleDeletedRoom = () => {
-            const oldRoom = JSON.parse(sessionStorage.getItem('room'))
-            if(oldRoom) {
-                socket.emit('deleteRoom', oldRoom.code, () => {
-                })
-            }
+        const handleExpiredConnection = () => {
             sessionStorage.removeItem('room')
             socket.disconnect()
-            sessionStorage.removeItem('votedMovies')
-            navigate('/joinRoom')
+            //sessionStorage.removeItem('votedMovies')
+            navigate('/createRoom')
         }
 
-        socket.on('deleted-room', handleDeletedRoom)
+        socket.on('connection-expired', handleExpiredConnection)
         return () => {
-            socket.off('deleted-room', handleDeletedRoom)
+            socket.off('connection-expired', handleExpiredConnection)
         }
     })
 
