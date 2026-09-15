@@ -1,0 +1,54 @@
+#room-manager-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+    width: 95%;
+    margin-top: 20px;
+}
+
+#room-manager-container #delete-room {
+    background-color: red;
+    color: white;
+
+    width: fit-content;
+    align-self: flex-end;
+}
+
+#room-code-container {
+    padding: 15px 20px;
+    border-radius: 15px;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    background-color: var(--primary);
+    color: var(--on-primary);
+
+    p {
+        margin: 10px;
+    }
+
+    p:first-of-type {
+        font-size: 1.4rem;
+        color: var(--on-primary);
+    }
+}
+
+#room-code {
+    font-size: 1.3rem;
+    background-color: var(--secondary);
+    padding: 10px;
+    border-radius: 20px;
+}
+
+#room-manager-container #play {
+    margin-top: 15px;
+    width: 93%;
+
+    font-size: 1.3rem;
+}

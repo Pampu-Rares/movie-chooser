@@ -1,0 +1,83 @@
+#match-dialog {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: fit-content;
+    height: fit-content;
+    padding: 20px;
+    border: 5px solid var(--on-primary);
+
+    background-color: var(--accent);
+    color: var(--on-accent);
+    border-radius: 25px;
+
+    display: grid;
+    grid-template-areas: 
+        "title"
+        "poster"
+        "check-out"
+        "skip";
+    align-items: center;
+    justify-items: center;
+    gap: 10px;
+
+    transition: opacity 0.8s ease;
+}
+
+#match-dialog p:first-of-type {
+    grid-area: title;
+
+    font-size: 1.6rem;
+    margin: 16px;
+}
+
+#poster-container {
+    grid-area: poster;
+
+    width: clamp(20px, 70vw, 450px);
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+#poster-container > img {
+    width: 100%;
+    object-fit: cover;
+}
+
+button {
+    margin: 10px;
+}
+
+#check-out-movie {
+    grid-area: check-out;
+
+    min-width: 95%;
+    font-size: 1.0rem;
+}
+
+#skip {
+    grid-area: skip;
+    align-self: self-end;
+    padding: 10px 20px;
+    
+    font-size: 0.8rem;
+    font-weight: normal;
+}
+
+.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.visible {
+    opacity: 1;
+}
+
+@media (min-width: 720px) {
+    #match-dialog {
+        grid-template-areas: 
+            "poster title"
+            "poster check-out"
+            "poster skip";
+    }
+}

@@ -1,0 +1,81 @@
+#landing-page {
+    flex: 1;
+    padding: 20px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: clamp(15px, 2vw, 25px);
+}
+
+#landing-page-title, #landing-page-desc, #landing-page #photo-loader, #landing-page #create-room-btn, #landing-page #join-room-btn {
+    opacity: 1;
+    transform: translateY(0);
+    animation: fade-in 1s ease backwards;
+}
+
+#landing-page-title {
+    margin: 10px 0 20px;
+}
+
+#landing-page-desc {
+    animation-delay: 0.5s;
+    margin: 5px;
+}
+
+#landing-page #photo-loader { 
+    animation-delay: 1s;
+    height: clamp(60px, 50vh, 600px);
+    aspect-ratio: 2/3;
+    overflow: hidden;
+    border-radius: 15px;
+    background-color: var(--accent);
+    box-shadow: 12px 10px var(--secondary);
+}
+
+#landing-page #photo-loader > img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    transition: opacity 0.5s ease;
+}
+
+#landing-page #play-buttons {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(15px, 30%, 25px);
+    margin-top: 10px;
+}
+
+#landing-page #play-buttons button {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 400;
+    background-color: var(--accent);
+    border: 3px solid var(--primary);
+}
+
+#landing-page #play-buttons button:hover {
+    transform: scale(1.05);
+}
+
+#landing-page #join-room-btn {
+    animation-delay: 1.2s;
+}
+
+#landing-page #create-room-btn {
+    animation-delay: 1.3s;
+}
+
+#landing-page .hidden {
+    opacity: 0;
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+}

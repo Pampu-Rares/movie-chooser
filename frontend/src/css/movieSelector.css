@@ -1,0 +1,132 @@
+#swiper-container {
+    position: relative;
+    height: 100%;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#swiper-container .stop-overflow {
+    overflow: hidden;
+}
+
+#swiper-container #movie-selector {
+    position: relative;
+    width: clamp(20px, 80%, 500px);
+
+    padding: 20px;
+    border-radius: 15px;
+
+    background-color: var(--primary);
+    color: var(--on-primary);
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#swiper-container #movie-poster-container {
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+#swiper-container #movie-poster {
+    width: 100%;
+    object-fit: cover;
+}
+
+#swiper-container h3 {
+    font-size: 1.3rem;
+}
+
+#swiper-container #controls {
+    width: 100%;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: clamp(10px, 5%, 20px);
+}
+
+#swiper-container #see-details {
+    font-size: 1.0rem;
+
+    background-color: var(--secondary);
+    color: var(--text-color);
+    margin: 0;
+}
+
+#swiper-container #controls > button:not(#see-details) {
+    border-radius: 90%;
+    margin: 0;
+
+    width: clamp(100px, 20%, 160px);
+}
+
+#swiper-container #dislike-btn {
+    background-color: red;
+}
+
+#swiper-container #dislike-btn > img, #like-btn > img {
+    width: 80%;
+    object-fit: contain;
+    -webkit-user-drag: none;
+}
+
+#swiper-container #like-btn {
+    background-color: green;
+}
+
+
+#swiper-container #movie-description {
+    max-height: 0;
+    opacity: 0;
+
+    color: var(--on-primary);
+
+    overflow: hidden; 
+
+    transition: max-height 0.6s ease, opacity 0.6s ease;
+}
+
+#swiper-container .liked {
+    animation: like-animation 0.8s ease;
+}
+
+#swiper-container .disliked {
+    animation: dislike-animation 0.8s ease;
+}
+
+@keyframes dislike-animation {
+    0% {
+        rotate: 0deg;
+        transform: translateX(0);
+        opacity: 1;
+    }
+    100% {
+        rotate: -60deg;
+        transform: translateX(-300%);
+        opacity: 0;
+    }
+}
+
+@keyframes like-animation {
+    0% {
+        rotate: 0deg;
+        transform: translateX(0);
+        opacity: 1;
+    }
+    100% {
+        rotate: 60deg;
+        transform: translateX(300%);
+        opacity: 0;
+    }
+}
+
+@media (min-width: 580px) {
+    #swiper-container #movie-poster-container {
+        width: 70%;
+    }
+}
