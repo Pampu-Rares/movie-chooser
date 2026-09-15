@@ -19,13 +19,7 @@ This project requires Node.js installed on your system.
 git  clone  https://github.com/Pampu-Rares/movie-chooser.git
 ```
 
-2. Switch to the `initial-version` branch: 
-
-```shell
-git checkout initial-version
-```
-
-- There are two main folders in this project: `backend` and `frontend`.
+2. There are two main folders in this project: `backend` and `frontend`.
 
 ### Backend
 
