@@ -24,7 +24,7 @@
     transition: opacity 0.8s ease;
 }
 
-#match-dialog p:first-of-type {
+#match-dialog h3 {
     grid-area: title;
 
     font-size: 1.6rem;
@@ -34,7 +34,7 @@
 #poster-container {
     grid-area: poster;
 
-    width: clamp(20px, 70vw, 450px);
+    width: clamp(20px, 70vw, 400px);
     border-radius: 20px;
     overflow: hidden;
 }
@@ -44,14 +44,17 @@
     object-fit: cover;
 }
 
-button {
+#match-dialog button {
     margin: 10px;
+    width: auto;
+    background-color: var(--secondary);
+    color: var(--text-color);
 }
 
 #check-out-movie {
     grid-area: check-out;
 
-    min-width: 95%;
+    min-width: 80%;
     font-size: 1.0rem;
 }
 
@@ -79,5 +82,14 @@ button {
             "poster title"
             "poster check-out"
             "poster skip";
+    }
+
+    #poster-container {
+        width: 350px;
+    }
+
+    #check-out-movie {
+        font-size: 1.3rem;
+        padding: 30px 5px;
     }
 }

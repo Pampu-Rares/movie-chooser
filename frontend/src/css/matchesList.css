@@ -11,13 +11,14 @@
     align-items: center;
     justify-content: center;
     gap: 20px;
+    margin-bottom: 40px;
 }
 
 #play-again-btn {
-    margin-top: 30px;
+    margin-top: 10px;
     margin-bottom: 30px;
     width: fit-content;
-    padding: 20px 40px;
+    padding: 20px 80px;
 
     background-color: var(--primary);
     color: var(--on-primary);

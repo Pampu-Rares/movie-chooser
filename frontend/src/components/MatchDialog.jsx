@@ -4,7 +4,7 @@ function MatchDialog({ match, skipMatch }) {
     console.log(match)
     return (
         <div id="match-dialog" className={match.isMatch ? 'visible' : 'hidden'}>
-            <p>You found your movie!</p>
+            <h3>You found your movie!</h3>
             <div id='poster-container'>
                 {match.movie && <img src={`https://image.tmdb.org/t/p/w500/${match.movie.poster_path}`} /> }
             </div>

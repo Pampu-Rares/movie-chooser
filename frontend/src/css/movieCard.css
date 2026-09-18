@@ -2,7 +2,7 @@
     background-color: var(--secondary);
 
     width: clamp(40px, 70%, 300px);
-    height: clamp(80px, 65vh,525px);
+    height: fit-content;
     padding: clamp(5px, 5vw, 15px);
 
     display: flex;
@@ -34,4 +34,10 @@
     font-size: 0.7rem;
     align-self: flex-start;
     margin-top: auto;
+}
+
+@media (min-width: 720px) {
+    .movie-card {
+        height: clamp(80px, 65vh,525px);
+    }
 }

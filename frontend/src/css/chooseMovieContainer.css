@@ -1,3 +1,7 @@
+#movie-finder-container {
+    position: relative;
+}
+
 #game-container {
     display: flex;
     flex-direction: column;

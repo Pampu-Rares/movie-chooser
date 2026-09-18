@@ -7,6 +7,14 @@
     margin-top: 20px;
 }
 
+#room-manager-container h1 {
+    margin: 0;
+}
+
+#room-manager-container p:first-of-type {
+    margin: 10px;
+}
+
 #room-manager-container #delete-room {
     background-color: red;
     color: white;
@@ -48,6 +56,7 @@
 
 #room-manager-container #play {
     margin-top: 15px;
+    margin-bottom: 20px;
     width: 93%;
 
     font-size: 1.3rem;

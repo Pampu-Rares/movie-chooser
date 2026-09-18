@@ -1,6 +1,6 @@
 import '../css/chooseMovieContainer.css'
 import { socket } from "../services/socketLogic.js"
-import { useState, useEffect} from 'react'
+import { useState, useEffect, useRef} from 'react'
 import MovieSelector from '../components/MovieSelector.jsx'
 import MatchDialog from "../components/MatchDialog.jsx"
 import MatchesList from '../components/MatchesList.jsx'
@@ -18,6 +18,8 @@ function ChooseMovieGame() {
     const navigate = useNavigate()
     const [searchParams] = useSearchParams()
     const roomCode = searchParams.get('roomCode')
+
+    const matchRef = useRef(null) // not working as intended
 
     const [socketId, setSocketId] = useState(socket.id)
     const [movies, setMovies] = useState([])
@@ -129,6 +131,7 @@ function ChooseMovieGame() {
             isMatch: true,
             movie: movieMatch
           })
+          matchRef.current?.scrollIntoView({behavior: 'smooth'})
         }
 
         socket.on('movies', handleMovies)
@@ -211,7 +214,7 @@ function ChooseMovieGame() {
     }
 
     return (
-        <>
+        <div id='movie-finder-container'>
           <div id='game-container' className={currentMatch.isMatch ? 'blur' : ''}>
               <p>Socket id: {socketId}</p>
               {matchesList.length ? (
@@ -224,8 +227,8 @@ function ChooseMovieGame() {
                 movies && movies.length && <MovieSelector movie={currentMovieOption.movie} handleDislike={handleDislike} handleLike={handleLike} like={like} dislike={dislike}/>
                 )}
           </div>
-          <MatchDialog match={currentMatch} skipMatch={skipMatch}/>
-        </>
+          <MatchDialog ref={matchRef} match={currentMatch} skipMatch={skipMatch}/>
+        </div>
     )
 }
 

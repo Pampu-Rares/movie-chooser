@@ -10,6 +10,10 @@
     gap: clamp(15px, 2vw, 25px);
 }
 
+#create-room-container h1 {
+    margin: 0;
+}
+
 #create-room-container #create-room-form {
     padding: 20px;
     width: 80%;
@@ -30,6 +34,10 @@
 #create-room-container #ms-label, #create-room-container label {
     font-size: 1.1rem;
     margin: 5px;
+}
+
+#create-room-container #movie-source {
+    height: fit-content; /* fix height on mac */
 }
 
 #create-room-container #movie-source, #create-room-container #personal-options-checkbox {
