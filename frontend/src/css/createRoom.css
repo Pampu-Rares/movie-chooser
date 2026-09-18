@@ -17,6 +17,8 @@
 #create-room-container #create-room-form {
     padding: 20px;
     width: 80%;
+    height: fit-content;
+    min-height: 45vh;
     border-radius: 15px;
 
     background-color: var(--secondary);
@@ -118,9 +120,11 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     p {
-        color: var(--on-primary);
         padding: 10px;
         margin: 0;
+    }
+    p:not(.selected) {
+        color: var(--on-primary);
     }
     p:first-of-type {
         border-right: 3px solid var(--background-color);
