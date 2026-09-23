@@ -35,7 +35,7 @@ function MatchesList({ matches, roomCode}) {
     return (
         <div id='matches-container'>
             <p id='end-message'>You went through all of the movies</p>
-            {!matches.length ? (
+            {matches.length === 0 ? (
                 <div>
                     <p>It seems you haven't found a movie to watch yet. {isAdmin ? 'Play again?' : ''}</p>
                     {isAdmin && <button id='play-again-btn' onClick={handlePlayAgain}>Play Again</button>}

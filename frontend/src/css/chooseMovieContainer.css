@@ -1,5 +1,6 @@
 #movie-finder-container {
     position: relative;
+    min-height: 60vh;
 }
 
 #game-container {

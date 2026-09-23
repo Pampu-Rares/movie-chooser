@@ -5,6 +5,9 @@ import MovieSelector from '../components/MovieSelector.jsx'
 import MatchDialog from "../components/MatchDialog.jsx"
 import MatchesList from '../components/MatchesList.jsx'
 import { useNavigate, useSearchParams } from 'react-router-dom'
+import ErrorDialog from '../components/ErrorDialog.jsx'
+import Loading from '../components/Loading.jsx'
+import {flushSync} from 'react-dom'
 
 function shuffleMovies(movies) {
     for(let i = movies.length - 1; i > 0; i--) {
@@ -34,6 +37,8 @@ function ChooseMovieGame() {
     const [matchesList, setMatchesList] = useState([])
     const [roundsPlayed, setRoundsPlayed] = useState(0)
     const [waitingForOthers, setWaitingForOthers] = useState(false)
+    const [loading, setLoading] = useState(true) // need to implement this
+    const [error, setError] = useState(false) // set to true to test it properly
 
 
     //refresh disconnection edge case
@@ -87,22 +92,32 @@ function ChooseMovieGame() {
             navigate('/joinRoom')
       }
 
+      const handleApiError = () => {
+        setError(true)
+        // should also set background blur
+      }
+
         socket.on('deleted-room', handleRoomDeletion)
         socket.on('connection-expired', handleExpiredConnection)
+        socket.on('api-error', handleApiError)
         return () => {
             socket.off('deleted-room', handleRoomDeletion)
             socket.off('connection-expired', handleExpiredConnection)
+            socket.off('api-error', handleApiError)
         }
     }, [])
 
     useEffect(() => {
         const handleMovies = (movies, isNewRound, handleMatches) => {
           console.log('Received movies')
+          setLoading(false)
           if(isNewRound) {
             sessionStorage.removeItem('votedMovies') // should also make sure to remove it from other pages
             setMatchesList([])
           }
-          setAllMovies(movies)
+          flushSync(() => {
+            setAllMovies(movies)
+          });
           console.log(movies)
           const votedMovies = JSON.parse(sessionStorage.getItem('votedMovies'))
           let actualMovies = movies
@@ -148,10 +163,12 @@ function ChooseMovieGame() {
 
       const handleMatchesList = (matches) => {
         console.log('Received matches')
-        console.log(allMovies)
+        console.log(matches, allMovies)
+        setLoading(false)
         setMatchesList(matches.map(movieId => {
-          for(const movie of allMovies)
+          for(const movie of allMovies) {
             if(movieId === movie.id) return movie
+          }
         }))
       }
       
@@ -213,9 +230,13 @@ function ChooseMovieGame() {
       }, 1000)
     }
 
+    const handleErrorReturnBtn = () => {
+      navigate('/')
+    }
+    // test the movies && movies.length !== 0 stuff
     return (
         <div id='movie-finder-container'>
-          <div id='game-container' className={currentMatch.isMatch ? 'blur' : ''}>
+          <div id='game-container' className={currentMatch.isMatch || error || loading ? 'blur' : ''}>
               <p>Socket id: {socketId}</p>
               {matchesList.length ? (
                 <MatchesList matches={matchesList} roomCode={roomCode}/>
@@ -224,10 +245,12 @@ function ChooseMovieGame() {
                     <h3>Waiting for the others to finish</h3>
                   </div>
                 ) : (
-                movies && movies.length && <MovieSelector movie={currentMovieOption.movie} handleDislike={handleDislike} handleLike={handleLike} like={like} dislike={dislike}/>
+                movies && movies.length !== 0 && <MovieSelector movie={currentMovieOption.movie} handleDislike={handleDislike} handleLike={handleLike} like={like} dislike={dislike}/>
                 )}
           </div>
           <MatchDialog ref={matchRef} match={currentMatch} skipMatch={skipMatch}/>
+          {error && <ErrorDialog message={'There was an error with the TMDB server.'} handleReturn={handleErrorReturnBtn}/>}
+          {loading && <Loading />}
         </div>
     )
 }
