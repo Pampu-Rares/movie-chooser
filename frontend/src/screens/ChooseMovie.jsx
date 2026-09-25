@@ -136,10 +136,13 @@ function ChooseMovieGame() {
             index: 0,
             movie: shuffledMovies[0]
           })
-          handleMatches()
+          if(isNewRound) setWaitingForOthers(false)
+            else handleMatches() // if the function is defined
         }
 
         const handleMatch = movieId => {
+          console.log("Match from:", allMovies)
+          console.log("Match:", movieId)
           const movieMatch = allMovies.find(movie => movie.id === movieId)
           console.log('movies on match: ', movies, ' and movie id:', movieId)
           setCurrentMatch({
@@ -156,7 +159,7 @@ function ChooseMovieGame() {
             socket.off('movies', handleMovies)
             socket.off('match', handleMatch)
         }
-    }, [movies.length, roundsPlayed])
+    }, [movies.length, allMovies.length, roundsPlayed]) // check if movies.length is necessary
 
     //final matches list
     useEffect(() => {
