@@ -239,9 +239,9 @@ io.on('connection', async (socket) => {
         if(disconnectionTimeout) {
             clearTimeout(disconnectionTimeout)
             pendingDisconnections.delete(oldId)
-            //console.log('User: Reconnection successful')
+            console.log('User: Reconnection successful')
         } else {
-            //console.log('Connection expired')
+            console.log('Connection expired')
             socket.emit('deletedRoom')
             return ;
         }
