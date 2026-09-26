@@ -196,7 +196,10 @@ io.on('connection', async (socket) => {
 
     socket.on('rejoinAdmin', (code, oldId, handleRejoin) => {
         const disconnectionTimeout = pendingDisconnections.get(oldId)
-        if(disconnectionTimeout) {
+        const oldRoom = rooms.get(code)
+        console.log("Rejoining admin with socket.id", socket.id, " in room:", oldRoom)
+        console.log("Checking disconnection timeouts:", disconnectionTimeout)
+        if(disconnectionTimeout || oldRoom.users.has(oldId)) {
             clearTimeout(disconnectionTimeout)
             pendingDisconnections.delete(oldId)
             console.log('Admin: Reconnection successful')
@@ -205,7 +208,6 @@ io.on('connection', async (socket) => {
             socket.emit('connection-expired')
             return ;
         }
-        const oldRoom = rooms.get(code)
         if(!oldRoom) return ;
         const newUsers = oldRoom.users.map(user => {
             let newId = user.id
@@ -291,6 +293,8 @@ io.on('connection', async (socket) => {
     socket.on('disconnect', () => {
         // pendingDisconnections map
         console.log("Disconnected from room:", userRooms)
+        console.log("With user id: ", socket.id)
+        console.log("Available rooms:", rooms)
         console.log("Pending disconnections:", pendingDisconnections)
         if(userRooms.has(socket.id)) {
             console.log('Disconected: ' +  socket.id)
@@ -310,7 +314,7 @@ io.on('connection', async (socket) => {
                 console.log('deleted socket id')
             }, 60 * 1000)
             pendingDisconnections.set(socket.id, disconnectUserTimeout)
-        } // else console.log('Disconnected: no room')
+        } else console.log('Tried adding a disconnect timeout, but userRoom was not found')
         
     })
 })

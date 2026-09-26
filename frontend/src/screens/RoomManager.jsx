@@ -55,7 +55,6 @@ function RoomManager() {
                     setUsers([{id: socket.id, name: username}])
                 })
             }
-
         }
 
         const handleUsers = (userId, users) => {
