@@ -245,7 +245,7 @@ io.on('connection', async (socket) => {
         console.log("Rejoining user with socket.id", socket.id, " in room:", oldRoom)
         console.log("Old id for reconnection is:", oldId)
         console.log("Checking disconnection timeouts:", disconnectionTimeout)
-        if(disconnectionTimeout || (oldRoom && oldRoom.users.includes(oldId))) {
+        if(disconnectionTimeout || (oldRoom && oldRoom.users.some(user => user.id === oldId))) {
             clearTimeout(disconnectionTimeout)
             pendingDisconnections.delete(oldId)
             console.log('User: Reconnection successful')
