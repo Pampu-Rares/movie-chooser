@@ -243,6 +243,7 @@ io.on('connection', async (socket) => {
         const disconnectionTimeout = pendingDisconnections.get(oldId)
         const oldRoom = rooms.get(code)
         console.log("Rejoining user with socket.id", socket.id, " in room:", oldRoom)
+        console.log("Old id for reconnection is:", oldId)
         console.log("Checking disconnection timeouts:", disconnectionTimeout)
         if(disconnectionTimeout || (oldRoom && oldRoom.users.includes(oldId))) {
             clearTimeout(disconnectionTimeout)
@@ -309,13 +310,18 @@ io.on('connection', async (socket) => {
                 userRooms.delete(socket.id)
                 const oldRoom = rooms.get(oldRoomCode)
                 if(oldRoom) {
-                    if(oldRoom.admin === socket.id) rooms.delete(oldRoomCode)
+                    if(oldRoom.admin === socket.id) {
+                        rooms.delete(oldRoomCode)
+                        socket.to(oldRoomCode).emit('deletedRoom')
+                        io.in(oldRoomCode).socketsLeave(oldRoomCode)
+                    } 
                     else {
                         const newUsers = oldRoom.users.filter(user => user.id !== socket.id)
                         rooms.set(oldRoomCode, {
                             ...oldRoom,
                             users: newUsers
                         })
+                        socket.to(oldRoomCode).emit('userLeft', socket.id, newUsers)
                     }
                 }
                 pendingDisconnections.delete(socket.id)
