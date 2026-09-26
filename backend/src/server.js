@@ -242,6 +242,8 @@ io.on('connection', async (socket) => {
     socket.on('rejoinRoom', (code, oldId, handleRejoin) => {
         const disconnectionTimeout = pendingDisconnections.get(oldId)
         const oldRoom = rooms.get(code)
+        console.log("Rejoining user with socket.id", socket.id, " in room:", oldRoom)
+        console.log("Checking disconnection timeouts:", disconnectionTimeout)
         if(disconnectionTimeout || oldRoom.users.includes(oldId)) {
             clearTimeout(disconnectionTimeout)
             pendingDisconnections.delete(oldId)
