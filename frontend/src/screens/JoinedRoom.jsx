@@ -38,6 +38,10 @@ function JoinedRoom() {
             socket.once('connect', handleConnection)
         } else handleConnection()
         sessionStorage.removeItem('votedMovies')
+
+        return () => {
+            socket.off('connect', handleConnection)
+        }
     }, [])
 
     useEffect(() => {

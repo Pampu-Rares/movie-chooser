@@ -141,6 +141,7 @@ io.on('connection', async (socket) => {
         updatedLikedMovies[movieId] += 1
         const matches = currentRoom.matches
         if(updatedLikedMovies[movieId] > Math.floor(currentRoom.users.length / 2)) {
+            console.log('Emitting match to everyone: ', movieId)
             io.to(code).emit('match', movieId)
             matches.push(movieId)
         }

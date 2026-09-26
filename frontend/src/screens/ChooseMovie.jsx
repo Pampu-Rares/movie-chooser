@@ -111,23 +111,24 @@ function ChooseMovieGame() {
         const handleMovies = (movies, isNewRound, handleMatches) => {
           console.log('Received movies')
           setLoading(false)
+          let actualMovies = movies
           if(isNewRound) {
             sessionStorage.removeItem('votedMovies') // should also make sure to remove it from other pages
             setMatchesList([])
+          } else {
+            const votedMovies = JSON.parse(sessionStorage.getItem('votedMovies'))
+            if(votedMovies) {
+              actualMovies = movies.filter(movie => !votedMovies.includes(movie.id))
+              if(!actualMovies.length) setWaitingForOthers(true)
+            }
           }
           flushSync(() => {
             setAllMovies(movies)
           });
           console.log(movies)
-          const votedMovies = JSON.parse(sessionStorage.getItem('votedMovies'))
-          let actualMovies = movies
-          if(votedMovies) {
-            actualMovies = movies.filter(movie => !votedMovies.includes(movie.id))
-            if(!actualMovies.length) setWaitingForOthers(true)
-          }
           const shuffledMovies = shuffleMovies(actualMovies)
           setMovies(shuffledMovies)
-          setRoundsPlayed(1) // do i need to reset it?
+          setRoundsPlayed(current => current+1) // do i need to reset it?
           setCurrentMatch({
             isMatch: false,
             movie: null
@@ -137,7 +138,7 @@ function ChooseMovieGame() {
             movie: shuffledMovies[0]
           })
           if(isNewRound) setWaitingForOthers(false)
-            else handleMatches() // if the function is defined
+          else handleMatches() // if the function is defined
         }
 
         const handleMatch = movieId => {
@@ -159,7 +160,7 @@ function ChooseMovieGame() {
             socket.off('movies', handleMovies)
             socket.off('match', handleMatch)
         }
-    }, [movies.length, allMovies.length, roundsPlayed]) // check if movies.length is necessary
+    }, [roundsPlayed ]) // check if movies.length is necessary
 
     //final matches list
     useEffect(() => {
@@ -179,7 +180,7 @@ function ChooseMovieGame() {
       return () => {
         socket.off('matches-list', handleMatchesList)
       }
-    }, [allMovies.length])
+    }, [roundsPlayed])
 
     const nextMovie = () => {
         const newIndex = currentMovieOption.index + 1
