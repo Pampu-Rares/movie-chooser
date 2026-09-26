@@ -290,6 +290,8 @@ io.on('connection', async (socket) => {
 
     socket.on('disconnect', () => {
         // pendingDisconnections map
+        console.log("Disconnected from room:", userRooms)
+        console.log("Pending disconnections:", pendingDisconnections)
         if(userRooms.has(socket.id)) {
             console.log('Disconected: ' +  socket.id)
             const disconnectUserTimeout = setTimeout(() => {
@@ -308,7 +310,7 @@ io.on('connection', async (socket) => {
                 console.log('deleted socket id')
             }, 60 * 1000)
             pendingDisconnections.set(socket.id, disconnectUserTimeout)
-        } else console.log('Disconnected: no room')
+        } // else console.log('Disconnected: no room')
         
     })
 })
