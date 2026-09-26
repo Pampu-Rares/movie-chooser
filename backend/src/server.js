@@ -208,7 +208,10 @@ io.on('connection', async (socket) => {
             socket.emit('connection-expired')
             return ;
         }
-        if(!oldRoom) return ;
+        if(!oldRoom) {
+            socket.emit('connection-expired')
+            return ;
+        } 
         const newUsers = oldRoom.users.map(user => {
             let newId = user.id
             if(user.id === oldId) newId = socket.id
@@ -238,7 +241,8 @@ io.on('connection', async (socket) => {
 
     socket.on('rejoinRoom', (code, oldId, handleRejoin) => {
         const disconnectionTimeout = pendingDisconnections.get(oldId)
-        if(disconnectionTimeout) {
+        const oldRoom = rooms.get(code)
+        if(disconnectionTimeout || oldRoom.users.includes(oldId)) {
             clearTimeout(disconnectionTimeout)
             pendingDisconnections.delete(oldId)
             console.log('User: Reconnection successful')
@@ -247,9 +251,9 @@ io.on('connection', async (socket) => {
             socket.emit('deletedRoom')
             return ;
         }
-        const oldRoom = rooms.get(code)
         if(!oldRoom) {
             console.log('room not found')
+            socket.emit('deletedRoom')
             return ;
         }
         const newUsers = oldRoom.users.map(user => {
