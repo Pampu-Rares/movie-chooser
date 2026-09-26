@@ -199,7 +199,7 @@ io.on('connection', async (socket) => {
         const oldRoom = rooms.get(code)
         console.log("Rejoining admin with socket.id", socket.id, " in room:", oldRoom)
         console.log("Checking disconnection timeouts:", disconnectionTimeout)
-        if(disconnectionTimeout || oldRoom.admin === oldId) {
+        if(disconnectionTimeout || (oldRoom && oldRoom.admin === oldId)) {
             clearTimeout(disconnectionTimeout)
             pendingDisconnections.delete(oldId)
             console.log('Admin: Reconnection successful')
@@ -244,7 +244,7 @@ io.on('connection', async (socket) => {
         const oldRoom = rooms.get(code)
         console.log("Rejoining user with socket.id", socket.id, " in room:", oldRoom)
         console.log("Checking disconnection timeouts:", disconnectionTimeout)
-        if(disconnectionTimeout || oldRoom.users.includes(oldId)) {
+        if(disconnectionTimeout || (oldRoom && oldRoom.users.includes(oldId))) {
             clearTimeout(disconnectionTimeout)
             pendingDisconnections.delete(oldId)
             console.log('User: Reconnection successful')
