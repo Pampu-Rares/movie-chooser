@@ -226,12 +226,6 @@ function ChooseMovieGame() {
         ...prev,
         isMatch: false,
       }))
-      setTimeout(() => {
-        setCurrentMatch(prev => ({
-          ...prev,
-          movie: currentMovieOption.movie,
-        }))
-      }, 1000)
     }
 
     const handleErrorReturnBtn = () => {
