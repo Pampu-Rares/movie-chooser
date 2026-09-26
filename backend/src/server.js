@@ -306,13 +306,15 @@ io.on('connection', async (socket) => {
                 const oldRoomCode = userRooms.get(socket.id)
                 userRooms.delete(socket.id)
                 const oldRoom = rooms.get(oldRoomCode)
-                if(oldRoom.admin === socket.id) rooms.delete(oldRoomCode)
-                else {
-                    const newUsers = oldRoom.users.filter(user => user.id !== socket.id)
-                    rooms.set(oldRoomCode, {
-                        ...oldRoom,
-                        users: newUsers
-                    })
+                if(oldRoom) {
+                    if(oldRoom.admin === socket.id) rooms.delete(oldRoomCode)
+                    else {
+                        const newUsers = oldRoom.users.filter(user => user.id !== socket.id)
+                        rooms.set(oldRoomCode, {
+                            ...oldRoom,
+                            users: newUsers
+                        })
+                    }
                 }
                 pendingDisconnections.delete(socket.id)
                 console.log('deleted socket id')
