@@ -70,9 +70,29 @@ npm run dev
 
 ## Usage
 
-### The Movie Finder App
+Create or join a room with your friends and press play. The socket.io server then sends the room up to 10 movies to like or dislike based on your preferences. If more than half of the people in the room like a certain movie, it will appear as a match. At the end of all of the movies, the room admin can choose to play again if the movies were unsatisfactory.
 
-Create or join a room along with your friends and press play. The socket.io server then sends the room up to 10 movies to like or dislike based on your preferences. If more than half of the people in the room like a certain movie, it will appear as a match. At the end of all of the movies, the room admin can choose to play again if the movies were unsatisfactory.
+### Movie Finder
+
+- Create or join a room alongside your friends and start voting
+- The room can be as big as you'd like
+- At the end of the 10 shown movies, the room admin can choose to play again if the movies were unsatisfactory.
+
+![A depiction of the movie finder page](./readme_media/choose_movie.png)
+
+- If more than half of the people in a room like a movie, it will appear on screen as a match:
+- You can then choose to keep looking and skip the current match, or check out the movie
+
+![Movie match](./readme_media/match_screen.png)
+
+- All matches will appear at the end of the round on screen as a list
+- As of yet, the check out movie button doesn't do anything. This will be corrected in a future commit
+
+### See popular movies
+
+- Check out the most popular movies or search for a specific movie
+
+![A depiction of the popular movies page](./readme_media/popular_movies.png)
 
 ## License
 
