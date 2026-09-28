@@ -1,14 +1,14 @@
-# This README is under construction...
-
 # Movie Finder App
 A full-stack web application which helps you choose the next movie to watch by yourself or alongside your friends.
-- this project utilises React, Node.js, Socket.io, and TMDB API
+- this project uses React, Node.js, Socket.io, and TMDB API
+
+![A depiction of how the main page looks](./readme_media/main.png)
 
 ## Getting Started
 
 ### Prerequisites
 
-This project requires Node.js installed on your system.
+This project requires Node.js.
 - If you do not have Node.js installed, you can install it from [here](https://nodejs.org/en/download);
 
 ### Installation
@@ -28,7 +28,7 @@ The `backend` contains the Node.js server to which the `frontend` connects to re
 1. In the newly created `.env` file: 
 ```env
 API_KEY= # enter your TMDB API key
-PORT=3030
+PORT=3030 # if you host the project locally
 ```
 - If you do not have an API key, you can create one from the TMDB official website
 
@@ -41,7 +41,7 @@ npm install
 3. To run the server locally: open a terminal in the `backend` directory, then run the following command:
 
 ```shell
-npm run dev
+npm run backend
 ```
 
 ### Frontend
@@ -51,7 +51,7 @@ The `frontend` contains the React app for the website. It also requires a `.env`
 1. Add the `.env` file in the root of the `frontend`, and enter the same port as in the `backend/.env` file with this name:
 
 ```env
-VITE_SERVER_PORT=3030 # needs to match the other .env file's PORT
+VITE_SERVER_URL=http://localhost:3030 # needs to match the other .env file's PORT, if you're hosting it locally
 ```
 
 2. Open a terminal in the `frontend` folder and write again:
