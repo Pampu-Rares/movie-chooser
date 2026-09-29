@@ -25,9 +25,10 @@
     object-fit: cover;
 }
 
-.title {
+.movie-card .title {
     font-size: 1.3rem;
     margin: 0;
+    text-align: center;
 }
 
 .release-date {
@@ -39,5 +40,11 @@
 @media (min-width: 720px) {
     .movie-card {
         height: clamp(80px, 65vh,525px);
+    }
+}
+
+@media (max-width: 240px) {
+    .movie-card .title {
+        font-size: 1rem;
     }
 }

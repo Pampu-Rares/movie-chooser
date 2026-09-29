@@ -92,7 +92,7 @@ function PopularMovies() {
             <h1>Popular Movies</h1>
             <form id="search-movie-form" onSubmit={performSearch}>
                 <div id='search-bar-container'>
-                    <input id="search-bar" type='text' maxLength={100} value={searchQuery} onChange={e => setSearchQuery(e.target.value)} />
+                    <input id="search-bar" type='text' maxLength={30} value={searchQuery} onChange={e => setSearchQuery(e.target.value)} />
                     <button id='delete-search' type='button' className={!searchQuery.length ? 'hidden' : ''} onClick={cleanSearchQuery}>X</button>
                 </div>
                 <button id="search-input-btn" type='submit'>⌕</button>
