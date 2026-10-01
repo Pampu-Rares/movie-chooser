@@ -1,7 +1,8 @@
 #create-room-container {
     flex: 1;
+    height: fit-content;
     width: 90%;
-    padding: 20px;
+    padding: 20px clamp(5px,2%,20px);
     color: var(--text-color);
 
     display: flex;
@@ -10,13 +11,17 @@
     gap: clamp(15px, 2vw, 25px);
 }
 
+#create-room-container div {
+    -webkit-tap-highlight-color: transparent;
+}
+
 #create-room-container h1 {
     margin: 0;
 }
 
 #create-room-container #create-room-form {
-    padding: 20px;
-    width: 80%;
+    padding: 20px clamp(5px,2%,20px);
+    width: clamp(200px,80%, 600px);
     height: fit-content;
     min-height: 45vh;
     border-radius: 15px;
@@ -54,6 +59,8 @@
 }
 
 #create-room-container #movie-source {
+    align-self: center;
+    width: clamp(10px, 100%, 350px);
     display: grid;
     grid-template-rows: repeat(2, 1fr);
     grid-template-columns: repeat(3, 1fr);
@@ -105,8 +112,10 @@
 
 #create-room-container #personal-options-section {
     display: flex;
+    flex-wrap: wrap;
     flex-direction: row;
     align-items: center;
+    justify-content: center;
     gap: 10px;
 
     p {
@@ -147,6 +156,11 @@
     border-radius: 15px;
     border: 3px solid var(--background-color);
     font-size: 1.0rem;
+    max-width: 90%;
+}
+
+#create-room-container #personal-options-section>p {
+    margin: 10px 0;
 }
 
 #create-room-container #create-room-btn:hover {
@@ -157,6 +171,7 @@
     position: absolute;
     inset: 0;
     width: fit-content;
+    max-width: 80vw;
     height: fit-content;
     padding: 20px;
     margin: auto;
@@ -178,17 +193,24 @@
 
 #create-room-container #username-input {
     font-size: 1.2rem;
+    max-width: 80%;
     padding: 10px;
     border-radius: 15px;
     border: 3px solid var(--text-color);
 }
 
-.hidden {
+#create-room-container .hidden {
     opacity: 0;
     pointer-events: none;
 }
 
-.visible {
+#create-room-container .visible {
     opacity: 1;
     pointer-events: all;
+}
+
+@media (max-width: 250px) {
+    #create-room-container {
+        font-size: 0.8rem;
+    }
 }
