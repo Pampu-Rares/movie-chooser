@@ -11,7 +11,7 @@
     gap: clamp(15px, 2vw, 25px);
 }
 
-#create-room-container div {
+#create-room-container div, #create-room-container button {
     -webkit-tap-highlight-color: transparent;
 }
 
@@ -189,6 +189,8 @@
 #create-room-container h3 {
     margin: 0;
     margin-top: 10px;
+    color: var(--on-primary);
+    text-align: center;
 }
 
 #create-room-container #username-input {

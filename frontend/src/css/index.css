@@ -38,6 +38,7 @@ h1 {
 }
 
 button {
+  -webkit-tap-highlight-color: transparent;
   background-color: var(--primary);
   color: var(--on-primary);
   padding: clamp(10px, 1vw, 20px);

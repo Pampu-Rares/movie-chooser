@@ -19,12 +19,13 @@
     background-color: red;
     color: white;
 
+    margin: clamp(5px,2vw, 20px);
     width: fit-content;
     align-self: flex-end;
 }
 
 #room-code-container {
-    padding: 15px 20px;
+    padding: clamp(3px, 2%,15px) clamp(5px, 3%, 20px);
     border-radius: 15px;
 
     display: flex;
@@ -32,13 +33,13 @@
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: clamp(3px, 2%, 10px);
 
     background-color: var(--primary);
     color: var(--on-primary);
 
     p {
-        margin: 10px;
+        margin: clamp(2px, 2%, 10px);
     }
 
     p:first-of-type {
@@ -60,4 +61,15 @@
     width: 93%;
 
     font-size: 1.3rem;
+}
+
+@media (max-width: 380px) {
+    #room-manager-container {
+        font-size: 0.7rem;
+    }
+    #room-manager-container #room-code-container p:first-of-type {
+        font-size: 0.9rem;
+        margin-bottom: 0;
+        color: var(--on-primary);
+    }
 }

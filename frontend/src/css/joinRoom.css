@@ -62,6 +62,7 @@
     }
     #join-room-form {
         padding: 10px;
+        margin-top: 20px;
     }
     #join-room-form input {
         font-size: 1.0rem;

@@ -4,7 +4,7 @@
     background-color: var(--primary);
     width: 80%;
     min-height: 20vh;
-    padding: 20px;
+    padding: clamp(5px, 2%, 20px);
     border-radius: 20px;
 
     display: flex;
@@ -12,13 +12,14 @@
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    gap: 20px;
+    gap: clamp(5px, 2%, 20px);
 }
 
 #users-container .user {
     background-color: var(--secondary);
     width: fit-content;
-    padding: 20px 20px 10px 20px;
+    padding: clamp(5px, 2%, 20px);
+    padding-bottom: clamp(5px, 1%, 10px);
     border-radius: 15px;
     display: flex;
     flex-direction: column;
@@ -27,7 +28,7 @@
 }
 
 #users-container .no-kick {
-    padding: 20px;
+    padding: clamp(5px, 2%, 20px);
 }
 
 #users-container .username {
@@ -51,6 +52,6 @@
 
 #users-container .user:hover .kick {
     max-height: 300px;
-    padding: 10px 7px;
+    padding: 10px 7px; /*calc(10px - clamp(5px, 1%, 10px)) */
     cursor: pointer;
 }
