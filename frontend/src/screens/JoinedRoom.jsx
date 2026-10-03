@@ -3,6 +3,7 @@ import { useState, useEffect } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom"
 import { socket } from "../services/socketLogic"
 import RoomUsers from '../components/RoomUsers.jsx'
+import RoomCodeContainer from '../components/RoomCode.jsx'
 
 function JoinedRoom() {
     const navigate = useNavigate()
@@ -101,11 +102,9 @@ function JoinedRoom() {
                 <button id='leave-room-btn' onClick={leaveRoom}>Leave</button>
                 <h1>Joined Room</h1>
                 <p>Socket id: {socketId ? socketId : 'none'}</p>
-                <div id="room-code-container">
-                    <p>Room code:</p>
-                    <p id='room-code'>{roomCode}</p>
-                </div>
+                <RoomCodeContainer roomCode={roomCode} />
                 <RoomUsers users={users} isAdmin={false} />
+                <p>Waiting for the host to start the game...</p>
             </div>
             <div id='kicked-out-dialog' className={!kickedOut ? 'hidden' : ''}>
                 <h3>Kicked out</h3>

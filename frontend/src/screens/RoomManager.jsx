@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom"
 import { useState, useEffect } from "react"
 import { socket } from "../services/socketLogic"  
 import RoomUsers from '../components/RoomUsers.jsx'
+import RoomCodeContainer from '../components/RoomCode.jsx'
 
 function RoomManager() {
     const navigate = useNavigate()
@@ -98,10 +99,7 @@ function RoomManager() {
             <button id='delete-room' onClick={handleRoomDelete}>Delete Room</button>
             <h1>Manage room</h1>
             <p>Socket id: {socket.id/* ? socket.id : 'none'*/}</p> 
-            <div id="room-code-container">
-                <p>Room code:</p>
-                <p id='room-code'>{roomCode}</p>
-            </div>
+            <RoomCodeContainer roomCode={roomCode} />
             <RoomUsers users={users} handleKick={handleKick} isAdmin={true}/>
             <button id='play' onClick={startGame}>Start game</button>
         </div>

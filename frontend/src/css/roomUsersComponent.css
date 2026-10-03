@@ -12,6 +12,7 @@
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
+    align-content: center;
     gap: clamp(5px, 2%, 20px);
 }
 
@@ -19,12 +20,11 @@
     background-color: var(--secondary);
     width: fit-content;
     padding: clamp(5px, 2%, 20px);
-    padding-bottom: clamp(5px, 1%, 10px);
+    padding-bottom: clamp(2.5px, 1%, 10px);
     border-radius: 15px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
 }
 
 #users-container .no-kick {
@@ -40,6 +40,7 @@
     width: 100%;
     padding: 0;
     margin: 0;
+    margin-top: clamp(2.5px, 1cqw, 10px);
     overflow: hidden;
 
     text-align: center;

@@ -2,6 +2,7 @@ import '../css/popularMovies.css'
 import MovieCard from "../components/MovieCard"
 import { useState, useEffect} from 'react'
 import { getPopularMovies, searchMovies } from '../services/serverFetches.js'
+import { socket } from '../services/socketLogic.js'
 
 function PopularMovies() {
     const [loading, setLoading] = useState(true)
@@ -101,9 +102,9 @@ function PopularMovies() {
                 <p id="loading-message" className={!loading ? 'hidden' : ''}>Loading...</p>
                 {error ? (
                     <p id="error-message">{error}</p>
-                ) : (
+                ) : movies && movies.length ? (
                     movies.map(movie => <MovieCard movie={movie} key={movie.id} />)
-                )}
+                ) : <p>No results. Try searching for something else.</p>}
             </div>
         </div>
     )

@@ -13,6 +13,9 @@ function CreateRoom() {
         e.preventDefault()
         setShowDialog(true)
     }
+    const handleCancel = () => {
+        setShowDialog(false)
+    }
 
     const handleNameEnter = () => {
         if(!username.trim().length) alert('Enter a valid username')
@@ -22,7 +25,7 @@ function CreateRoom() {
     return (
         <div id='create-room-container'>
             <h1>Create Room</h1>
-            <form id='create-room-form' onSubmit={handleFormSubmit}>
+            <form id='create-room-form' className={!showDialog ? 'visible' : 'hidden'} onSubmit={handleFormSubmit}>
                 <div id='password-container'>
                     <label htmlFor='room-password'>Room password</label>
                     <input id='room-password' type='text' maxLength={20} placeholder='Optional'></input>
@@ -47,7 +50,10 @@ function CreateRoom() {
             <div id='set-name' className={showDialog ? 'visible' : 'hidden'}>
                 <h3>Enter an username to use</h3>
                 <input id='username-input' type='text' maxLength={16} value={username} onChange={(e) => setUsername(e.target.value)} />
-                <button id='enter-username' onClick={handleNameEnter}>Enter</button>
+                <div id='buttons-div'>
+                    <button id='enter-username' onClick={handleNameEnter}>Enter</button>
+                    <button id='cancel' onClick={handleCancel}>Cancel</button>
+                </div>
             </div>
         </div>
     )

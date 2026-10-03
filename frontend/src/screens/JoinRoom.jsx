@@ -15,15 +15,16 @@ function JoinRoom() {
             alert('Enter a valid username')
             return ;
         }
+        const correctedRoomCode = roomCode.toUpperCase()
 
         const executeJoin = () => {
-            socket.emit('joinRoom', roomCode, username, (isSuccess) => {
+            socket.emit('joinRoom', correctedRoomCode, username, (isSuccess) => {
                 if(isSuccess) {
                     sessionStorage.setItem('joinedRoom', JSON.stringify({
-                        code: roomCode,
+                        code: correctedRoomCode,
                         id: socket.id
                     }))
-                    navigate('/joinedRoom?username=' + encodeURIComponent(username) + '&roomCode=' + roomCode)
+                    navigate('/joinedRoom?username=' + encodeURIComponent(username) + '&roomCode=' + correctedRoomCode)
                 } else {
                     alert('The room code you entered is invalid')
                     socket.disconnect()
