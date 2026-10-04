@@ -51,7 +51,7 @@
     color: var(--on-primary)
 }
 
-#kicked-out-dialog .hidden {
+#kicked-out-dialog.hidden  {
     opacity: 0;
 }
 
