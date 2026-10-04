@@ -4,6 +4,7 @@ import { useState, useEffect } from "react"
 import { socket } from "../services/socketLogic"  
 import RoomUsers from '../components/RoomUsers.jsx'
 import RoomCodeContainer from '../components/RoomCode.jsx'
+import Loading from '../components/Loading.jsx'
 
 function RoomManager() {
     const navigate = useNavigate()
@@ -15,6 +16,7 @@ function RoomManager() {
         return sessionRoom ? sessionRoom.code : null
     })
     const [users, setUsers] = useState([])
+    const [loading, setLoading] = useState(true)
 
     const handleRoomDelete = () => {
         sessionStorage.removeItem('room')
@@ -36,6 +38,7 @@ function RoomManager() {
     useEffect(() => {
         const handleConnection = () => {
             const sessionRoom = JSON.parse(sessionStorage.getItem('room'))
+            setLoading(false)
             
             if(sessionRoom) {
                 // implement admin rejoin
@@ -95,14 +98,18 @@ function RoomManager() {
     })
 
     return (
-        <div id='room-manager-container'>
-            <button id='delete-room' onClick={handleRoomDelete}>Delete Room</button>
-            <h1>Manage room</h1>
-            <p>Socket id: {socket.id/* ? socket.id : 'none'*/}</p> 
-            <RoomCodeContainer roomCode={roomCode} />
-            <RoomUsers users={users} handleKick={handleKick} isAdmin={true}/>
-            <button id='play' onClick={startGame}>Start game</button>
+        <div id='room-manager-screen'>
+            <div id='room-manager-container'>
+                <button id='delete-room' onClick={handleRoomDelete}>Delete Room</button>
+                <h1>Manage room</h1>
+                <p>Socket id: {socket.id/* ? socket.id : 'none'*/}</p> 
+                <RoomCodeContainer roomCode={roomCode} />
+                <RoomUsers users={users} handleKick={handleKick} isAdmin={true}/>
+                <button id='play' onClick={startGame}>Start game</button>
+            </div>
+            {loading && <Loading />}
         </div>
+        
     )
 }
 

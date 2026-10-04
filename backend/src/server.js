@@ -183,6 +183,7 @@ io.on('connection', async (socket) => {
     })
     
     socket.on('kickUser', (userId, code) => {
+        console.log(userRooms.get(socket.id), ' kicked ', userId)
         const room = rooms.get(code)
         if(!room) return ;
         io.to(userId).emit('kickedOut')

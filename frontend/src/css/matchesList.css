@@ -2,6 +2,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    width: 99vw;
 }
 
 #matches-container #matches-list {
@@ -14,12 +15,25 @@
     margin-bottom: 40px;
 }
 
-#play-again-btn {
+#matches-container p:first-of-type {
+    display: inline-block;
+}
+
+#matches-container #play-again-btn {
     margin-top: 10px;
+    font-size: 1.1rem;
     margin-bottom: 30px;
+    margin-left: 0;
+    margin-right: 0;
     width: fit-content;
     padding: 20px 80px;
 
     background-color: var(--primary);
     color: var(--on-primary);
+}
+
+@media (max-width: 400px) {
+    #matches-container #play-again-btn {
+        padding: 10px 20px;
+    }
 }

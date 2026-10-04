@@ -1,3 +1,13 @@
+#room-manager-screen {
+    width: 99%;
+    margin: 0 auto;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
 #room-manager-container {
     display: flex;
     flex-direction: column;

@@ -1,10 +1,10 @@
 #match-dialog {
-    position: absolute;
+    position: fixed;
     inset: 0;
     margin: auto;
     width: fit-content;
     height: fit-content;
-    padding: 20px;
+    padding: clamp(5px, 3vw, 20px);
     border: 5px solid var(--on-primary);
 
     background-color: var(--accent);
@@ -26,6 +26,7 @@
 
 #match-dialog h3 {
     grid-area: title;
+    text-align: center;
 
     font-size: 1.6rem;
     margin: 16px;
@@ -49,30 +50,33 @@
     width: auto;
     background-color: var(--secondary);
     color: var(--text-color);
+    border: 3px solid var(--on-primary);
 }
 
-#check-out-movie {
+#match-dialog #check-out-movie {
     grid-area: check-out;
 
     min-width: 80%;
     font-size: 1.0rem;
 }
 
-#skip {
+#match-dialog #skip {
+    background-color: var(--primary);
+    color: var(--on-primary);
+    font-weight: bold;
     grid-area: skip;
     align-self: self-end;
     padding: 10px 20px;
     
     font-size: 0.8rem;
-    font-weight: normal;
 }
 
-.hidden {
+#match-dialog.hidden {
     opacity: 0;
     pointer-events: none;
 }
 
-.visible {
+#match-dialog.visible {
     opacity: 1;
 }
 

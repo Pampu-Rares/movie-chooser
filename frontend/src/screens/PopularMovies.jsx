@@ -3,6 +3,7 @@ import MovieCard from "../components/MovieCard"
 import { useState, useEffect} from 'react'
 import { getPopularMovies, searchMovies } from '../services/serverFetches.js'
 import { socket } from '../services/socketLogic.js'
+import Loading from '../components/Loading.jsx'
 
 function PopularMovies() {
     const [loading, setLoading] = useState(true)
@@ -99,13 +100,13 @@ function PopularMovies() {
                 <button id="search-input-btn" type='submit'>⌕</button>
             </form>
             <div id="popular-movies-container">
-                <p id="loading-message" className={!loading ? 'hidden' : ''}>Loading...</p>
                 {error ? (
                     <p id="error-message">{error}</p>
                 ) : movies && movies.length ? (
                     movies.map(movie => <MovieCard movie={movie} key={movie.id} />)
-                ) : <p>No results. Try searching for something else.</p>}
+                ) : !loading && <p>No results. Try searching for something else.</p>}
             </div>
+            {loading && <Loading />}
         </div>
     )
 }

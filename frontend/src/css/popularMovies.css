@@ -91,16 +91,6 @@
     border: 5px solid var(--secondary)
 }
 
-#popular-movies-page #loading-message {
-    position: absolute;
-    inset: 0;
-    margin: auto;
-    width:fit-content;
-    height: fit-content;
-
-    transition: opacity 0.3s ease;
-}
-
 #popular-movies-page .hidden {
     pointer-events: none;
     opacity: 0;
