@@ -103,26 +103,22 @@
 
 @keyframes dislike-animation {
     0% {
-        rotate: 0deg;
-        transform: translateX(0);
+        transform: translate(0, 0) rotate(0deg);
         opacity: 1;
     }
     100% {
-        rotate: -60deg;
-        transform: translateX(-300%);
+        transform: translate(-300%, 30%) rotate(-80deg);
         opacity: 0;
     }
 }
 
 @keyframes like-animation {
     0% {
-        rotate: 0deg;
-        transform: translateX(0);
+        transform: translate(0, 0) rotate(0deg);
         opacity: 1;
     }
     100% {
-        rotate: 60deg;
-        transform: translateX(300%);
+        transform: translate(300%, 30%) rotate(80deg);
         opacity: 0;
     }
 }
