@@ -1,6 +1,7 @@
 import {io} from 'socket.io-client'
+const SERVER_URL = import.meta.env.VITE_SERVER_URL
 
-export const socket = io('http://localhost:3030', {
+export const socket = io(SERVER_URL, {
     path: '/movieFinderGame/',
     autoConnect: false
 })

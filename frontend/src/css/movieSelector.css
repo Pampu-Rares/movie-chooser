@@ -1,13 +1,14 @@
 #swiper-container {
     position: relative;
     height: 100%;
+    margin: 20px;
 
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-#swiper-container .stop-overflow {
+#swiper-container.stop-overflow {
     overflow: hidden;
 }
 
@@ -15,7 +16,7 @@
     position: relative;
     width: clamp(20px, 80%, 500px);
 
-    padding: 20px;
+    padding: clamp(5px, 3%, 20px);
     border-radius: 15px;
 
     background-color: var(--primary);
@@ -38,31 +39,32 @@
 
 #swiper-container h3 {
     font-size: 1.3rem;
+    text-align: center;
 }
 
 #swiper-container #controls {
-    width: 100%;
-
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    gap: clamp(10px, 5%, 20px);
+    gap: clamp(5px, 3cqw, 20px);
 }
 
 #swiper-container #see-details {
     font-size: 1.0rem;
 
     background-color: var(--secondary);
+    border: 3px solid var(--on-primary);
     color: var(--text-color);
     margin: 0;
 }
 
 #swiper-container #controls > button:not(#see-details) {
+    aspect-ratio: 1;
     border-radius: 90%;
     margin: 0;
 
-    width: clamp(100px, 20%, 160px);
+    width: clamp(50px, 20%, 160px);
 }
 
 #swiper-container #dislike-btn {
@@ -101,26 +103,22 @@
 
 @keyframes dislike-animation {
     0% {
-        rotate: 0deg;
-        transform: translateX(0);
+        transform: translate(0, 0) rotate(0deg);
         opacity: 1;
     }
     100% {
-        rotate: -60deg;
-        transform: translateX(-300%);
+        transform: translate(-300%, 30%) rotate(-80deg);
         opacity: 0;
     }
 }
 
 @keyframes like-animation {
     0% {
-        rotate: 0deg;
-        transform: translateX(0);
+        transform: translate(0, 0) rotate(0deg);
         opacity: 1;
     }
     100% {
-        rotate: 60deg;
-        transform: translateX(300%);
+        transform: translate(300%, 30%) rotate(80deg);
         opacity: 0;
     }
 }
@@ -128,5 +126,17 @@
 @media (min-width: 580px) {
     #swiper-container #movie-poster-container {
         width: 70%;
+    }
+}
+
+@media (max-width: 400px) {
+    #swiper-container #see-details {
+        font-size: 0.6rem;
+    }
+    #swiper-container h3 {
+        font-size: 1rem;
+    }
+    #swiper-container #dislike-btn > img, #like-btn > img {
+        width: 90%;
     }
 }

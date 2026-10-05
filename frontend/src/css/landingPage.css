@@ -25,7 +25,7 @@
 
 #landing-page #photo-loader { 
     animation-delay: 1s;
-    height: clamp(60px, 50vh, 600px);
+    width: clamp(40px ,80vw, 300px);
     aspect-ratio: 2/3;
     overflow: hidden;
     border-radius: 15px;
@@ -45,7 +45,7 @@
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    gap: clamp(15px, 30%, 25px);
+    gap: clamp(5px, 30%, 25px);
     margin-top: 10px;
 }
 
@@ -54,6 +54,7 @@
     font-size: 1.3rem;
     font-weight: 400;
     background-color: var(--accent);
+    color: var(--text-color);
     border: 3px solid var(--primary);
 }
 
@@ -77,5 +78,17 @@
     from {
         opacity: 0;
         transform: translateY(30px);
+    }
+}
+
+@media (max-width: 280px) {
+    #landing-page {
+        padding: 10px;
+    }
+    #landing-page #landing-page-title {
+        margin: 10px;
+    }
+    #landing-page #play-buttons button {
+        font-size: 1rem;
     }
 }

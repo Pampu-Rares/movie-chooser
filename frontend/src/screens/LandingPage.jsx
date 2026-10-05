@@ -26,7 +26,7 @@ function LandingPage() {
                         setHiddenPoster(false)
                     }, 10)
                 }, 520)
-                if(index === moviePosters.length - 1) index = 0
+                if(index === moviePosters.length - 1) index = -1
             }, 5000)
         }
 

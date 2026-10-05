@@ -2,6 +2,8 @@ import '../css/popularMovies.css'
 import MovieCard from "../components/MovieCard"
 import { useState, useEffect} from 'react'
 import { getPopularMovies, searchMovies } from '../services/serverFetches.js'
+import { socket } from '../services/socketLogic.js'
+import Loading from '../components/Loading.jsx'
 
 function PopularMovies() {
     const [loading, setLoading] = useState(true)
@@ -92,19 +94,19 @@ function PopularMovies() {
             <h1>Popular Movies</h1>
             <form id="search-movie-form" onSubmit={performSearch}>
                 <div id='search-bar-container'>
-                    <input id="search-bar" type='text' maxLength={100} value={searchQuery} onChange={e => setSearchQuery(e.target.value)} />
+                    <input id="search-bar" type='text' maxLength={30} value={searchQuery} onChange={e => setSearchQuery(e.target.value)} />
                     <button id='delete-search' type='button' className={!searchQuery.length ? 'hidden' : ''} onClick={cleanSearchQuery}>X</button>
                 </div>
                 <button id="search-input-btn" type='submit'>⌕</button>
             </form>
             <div id="popular-movies-container">
-                <p id="loading-message" className={!loading ? 'hidden' : ''}>Loading...</p>
                 {error ? (
                     <p id="error-message">{error}</p>
-                ) : (
+                ) : movies && movies.length ? (
                     movies.map(movie => <MovieCard movie={movie} key={movie.id} />)
-                )}
+                ) : !loading && <p>No results. Try searching for something else.</p>}
             </div>
+            {loading && <Loading />}
         </div>
     )
 }

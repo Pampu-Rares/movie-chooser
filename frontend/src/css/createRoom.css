@@ -1,7 +1,8 @@
 #create-room-container {
     flex: 1;
+    height: fit-content;
     width: 90%;
-    padding: 20px;
+    padding: 20px clamp(5px,2%,20px);
     color: var(--text-color);
 
     display: flex;
@@ -10,17 +11,31 @@
     gap: clamp(15px, 2vw, 25px);
 }
 
+#create-room-container div, #create-room-container button {
+    -webkit-tap-highlight-color: transparent;
+}
+
+#create-room-container h1 {
+    margin: 0;
+}
+
 #create-room-container #create-room-form {
-    padding: 20px;
-    width: 80%;
+    margin-top: auto;
+    margin-bottom: auto;
+    padding: 20px clamp(5px,2%,20px);
+    width: clamp(200px,80%, 600px);
+    height: fit-content;
+    min-height: 45vh;
     border-radius: 15px;
 
     background-color: var(--secondary);
 
     display: flex;
     flex-direction: column;
+    justify-content: space-evenly;
     gap: 10px;
     
+    transition: opacity 0.5s ease;
 }
 
 #create-room-container label {
@@ -29,7 +44,12 @@
 
 #create-room-container #ms-label, #create-room-container label {
     font-size: 1.1rem;
+    text-align: center;
     margin: 5px;
+}
+
+#create-room-container #movie-source {
+    height: fit-content; /* fix height on mac */
 }
 
 #create-room-container #movie-source, #create-room-container #personal-options-checkbox {
@@ -44,6 +64,8 @@
 }
 
 #create-room-container #movie-source {
+    align-self: center;
+    width: clamp(10px, 100%, 350px);
     display: grid;
     grid-template-rows: repeat(2, 1fr);
     grid-template-columns: repeat(3, 1fr);
@@ -95,8 +117,10 @@
 
 #create-room-container #personal-options-section {
     display: flex;
+    flex-wrap: wrap;
     flex-direction: row;
     align-items: center;
+    justify-content: center;
     gap: 10px;
 
     p {
@@ -110,9 +134,11 @@
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     p {
-        color: var(--on-primary);
         padding: 10px;
         margin: 0;
+    }
+    p:not(.selected) {
+        color: var(--on-primary);
     }
     p:first-of-type {
         border-right: 3px solid var(--background-color);
@@ -135,6 +161,11 @@
     border-radius: 15px;
     border: 3px solid var(--background-color);
     font-size: 1.0rem;
+    max-width: 90%;
+}
+
+#create-room-container #personal-options-section>p {
+    margin: 10px 0;
 }
 
 #create-room-container #create-room-btn:hover {
@@ -145,6 +176,7 @@
     position: absolute;
     inset: 0;
     width: fit-content;
+    max-width: 80vw;
     height: fit-content;
     padding: 20px;
     margin: auto;
@@ -162,21 +194,63 @@
 #create-room-container h3 {
     margin: 0;
     margin-top: 10px;
+    color: var(--on-primary);
+    text-align: center;
 }
 
 #create-room-container #username-input {
+    background-color: var(--accent);
     font-size: 1.2rem;
+    max-width: 80%;
     padding: 10px;
     border-radius: 15px;
-    border: 3px solid var(--text-color);
+    color: var(--text-color);
+    border: 3px solid var(--background-color);
 }
 
-.hidden {
+#create-room-container #buttons-div {
+    margin: 20px;
+    width: 80%;
+
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+#create-room-container #buttons-div #enter-username {
+    margin: 0;
+    background-color: var(--accent);
+    font-size: 1rem;
+    color: var(--text-color);
+    border: 3px solid var(--background-color);
+}
+#create-room-container #buttons-div #cancel {
+    margin: 0;
+    background-color: var(--secondary);
+    font-size: 1rem;
+    color: var(--text-color);
+    border: 3px solid var(--background-color);
+}
+
+#create-room-container .hidden {
     opacity: 0;
     pointer-events: none;
 }
 
-.visible {
+#create-room-container .visible {
     opacity: 1;
     pointer-events: all;
+}
+
+@media (max-width: 330px) {
+    #create-room-container {
+        font-size: 0.8rem;
+    }
+
+    #create-room-container #create-room-form {
+        margin: 0;
+    }
 }

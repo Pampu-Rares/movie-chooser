@@ -140,7 +140,8 @@ io.on('connection', async (socket) => {
         const updatedLikedMovies = currentRoom.likedMovies
         updatedLikedMovies[movieId] += 1
         const matches = currentRoom.matches
-        if(updatedLikedMovies[movieId] > Math.floor(currentRoom.users.length / 2)) {
+        if(updatedLikedMovies[movieId] > Math.floor(currentRoom.users.length / 2) && !matches.includes(movieId)) {
+            console.log('Emitting match to everyone: ', movieId)
             io.to(code).emit('match', movieId)
             matches.push(movieId)
         }
@@ -182,6 +183,7 @@ io.on('connection', async (socket) => {
     })
     
     socket.on('kickUser', (userId, code) => {
+        console.log(userRooms.get(socket.id), ' kicked ', userId)
         const room = rooms.get(code)
         if(!room) return ;
         io.to(userId).emit('kickedOut')
@@ -196,7 +198,10 @@ io.on('connection', async (socket) => {
 
     socket.on('rejoinAdmin', (code, oldId, handleRejoin) => {
         const disconnectionTimeout = pendingDisconnections.get(oldId)
-        if(disconnectionTimeout) {
+        const oldRoom = rooms.get(code)
+        console.log("Rejoining admin with socket.id", socket.id, " in room:", oldRoom)
+        console.log("Checking disconnection timeouts:", disconnectionTimeout)
+        if(disconnectionTimeout || (oldRoom && oldRoom.admin === oldId)) {
             clearTimeout(disconnectionTimeout)
             pendingDisconnections.delete(oldId)
             console.log('Admin: Reconnection successful')
@@ -205,8 +210,10 @@ io.on('connection', async (socket) => {
             socket.emit('connection-expired')
             return ;
         }
-        const oldRoom = rooms.get(code)
-        if(!oldRoom) return ;
+        if(!oldRoom) {
+            socket.emit('connection-expired')
+            return ;
+        } 
         const newUsers = oldRoom.users.map(user => {
             let newId = user.id
             if(user.id === oldId) newId = socket.id
@@ -236,18 +243,22 @@ io.on('connection', async (socket) => {
 
     socket.on('rejoinRoom', (code, oldId, handleRejoin) => {
         const disconnectionTimeout = pendingDisconnections.get(oldId)
-        if(disconnectionTimeout) {
+        const oldRoom = rooms.get(code)
+        console.log("Rejoining user with socket.id", socket.id, " in room:", oldRoom)
+        console.log("Old id for reconnection is:", oldId)
+        console.log("Checking disconnection timeouts:", disconnectionTimeout)
+        if(disconnectionTimeout || (oldRoom && oldRoom.users.some(user => user.id === oldId))) {
             clearTimeout(disconnectionTimeout)
             pendingDisconnections.delete(oldId)
-            //console.log('User: Reconnection successful')
+            console.log('User: Reconnection successful')
         } else {
-            //console.log('Connection expired')
+            console.log('Connection expired')
             socket.emit('deletedRoom')
             return ;
         }
-        const oldRoom = rooms.get(code)
         if(!oldRoom) {
             console.log('room not found')
+            socket.emit('deletedRoom')
             return ;
         }
         const newUsers = oldRoom.users.map(user => {
@@ -290,25 +301,36 @@ io.on('connection', async (socket) => {
 
     socket.on('disconnect', () => {
         // pendingDisconnections map
+        console.log("Disconnected from room:", userRooms)
+        console.log("With user id: ", socket.id)
+        console.log("Available rooms:", rooms)
+        console.log("Pending disconnections:", pendingDisconnections)
         if(userRooms.has(socket.id)) {
             console.log('Disconected: ' +  socket.id)
             const disconnectUserTimeout = setTimeout(() => {
                 const oldRoomCode = userRooms.get(socket.id)
                 userRooms.delete(socket.id)
                 const oldRoom = rooms.get(oldRoomCode)
-                if(oldRoom.admin === socket.id) rooms.delete(oldRoomCode)
-                else {
-                    const newUsers = oldRoom.users.filter(user => user.id !== socket.id)
-                    rooms.set(oldRoomCode, {
-                        ...oldRoom,
-                        users: newUsers
-                    })
+                if(oldRoom) {
+                    if(oldRoom.admin === socket.id) {
+                        rooms.delete(oldRoomCode)
+                        socket.to(oldRoomCode).emit('deletedRoom')
+                        io.in(oldRoomCode).socketsLeave(oldRoomCode)
+                    } 
+                    else {
+                        const newUsers = oldRoom.users.filter(user => user.id !== socket.id)
+                        rooms.set(oldRoomCode, {
+                            ...oldRoom,
+                            users: newUsers
+                        })
+                        socket.to(oldRoomCode).emit('userLeft', socket.id, newUsers)
+                    }
                 }
                 pendingDisconnections.delete(socket.id)
                 console.log('deleted socket id')
             }, 60 * 1000)
             pendingDisconnections.set(socket.id, disconnectUserTimeout)
-        } else console.log('Disconnected: no room')
+        } else console.log('Tried adding a disconnect timeout, but userRoom was not found')
         
     })
 })

@@ -2,7 +2,7 @@
     background-color: var(--secondary);
 
     width: clamp(40px, 70%, 300px);
-    height: clamp(80px, 65vh,525px);
+    height: fit-content;
     padding: clamp(5px, 5vw, 15px);
 
     display: flex;
@@ -25,13 +25,26 @@
     object-fit: cover;
 }
 
-.title {
+.movie-card .title {
     font-size: 1.3rem;
     margin: 0;
+    text-align: center;
 }
 
 .release-date {
     font-size: 0.7rem;
     align-self: flex-start;
     margin-top: auto;
+}
+
+@media (min-width: 720px) {
+    .movie-card {
+        height: clamp(80px, 65vh,525px);
+    }
+}
+
+@media (max-width: 240px) {
+    .movie-card .title {
+        font-size: 1rem;
+    }
 }

@@ -15,15 +15,16 @@ function JoinRoom() {
             alert('Enter a valid username')
             return ;
         }
+        const correctedRoomCode = roomCode.toUpperCase()
 
         const executeJoin = () => {
-            socket.emit('joinRoom', roomCode, username, (isSuccess) => {
+            socket.emit('joinRoom', correctedRoomCode, username, (isSuccess) => {
                 if(isSuccess) {
                     sessionStorage.setItem('joinedRoom', JSON.stringify({
-                        code: roomCode,
+                        code: correctedRoomCode,
                         id: socket.id
                     }))
-                    navigate('/joinedRoom?username=' + encodeURIComponent(username) + '&roomCode=' + roomCode)
+                    navigate('/joinedRoom?username=' + encodeURIComponent(username) + '&roomCode=' + correctedRoomCode)
                 } else {
                     alert('The room code you entered is invalid')
                     socket.disconnect()
@@ -68,7 +69,7 @@ function JoinRoom() {
     return (
         <>
             <h1>Join Room</h1>
-            <form onSubmit={handleSubmit}>
+            <form id='join-room-form' onSubmit={handleSubmit}>
                 <label htmlFor="enter-code">Enter the room code:<input id='enter-code' type='text' maxLength={10} value={roomCode} onChange={e => {setRoomCode(e.target.value)}}/></label>
                 <label htmlFor="enter-name">Enter an username:<input id='enter-name' type='text' maxLength={20} placeholder='e.g: Ben Dover' value={username} onChange={e => {setUsername(e.target.value)}}/></label>
                 <button type='submit'>Enter</button>

@@ -1,0 +1,22 @@
+#error-dialog {
+    position: absolute;
+    inset: 0;
+    margin: auto;
+    width: fit-content;
+    height: fit-content;
+    padding: 20px;
+    background-color: var(--secondary);
+    color: var(--text-color);
+    border: 5px solid var(--text-color);
+    border-radius: 20px;
+    text-align: center;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#error-dialog #return-button {
+    background-color: var(--primary);
+    color: var(--on-primary);
+}
