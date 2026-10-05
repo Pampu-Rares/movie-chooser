@@ -3,7 +3,7 @@ A full-stack web application which helps you choose the next movie to watch by y
 - this project uses React, Node.js, Socket.io, and TMDB API
 
 ![A depiction of how the main page looks](./readme_media/main.png)
-- You can check out a demo of this page [here](https://moviefinderpage-4rwldsuih-md-s.vercel.app).
+- You can check out a demo of this page [here](https://moviefinderpage.vercel.app).
 
 ## Getting Started
 
