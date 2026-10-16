@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 
 function CreateRoom() {
     const navigate = useNavigate()
-    const [selectedSource, setSelectedSource] = useState('ms-all')
+    const [selectedSource, setSelectedSource] = useState('ms-all') // not yet an available feature
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [showDialog, setShowDialog] = useState(false)
@@ -21,7 +21,7 @@ function CreateRoom() {
 
     const handleNameEnter = () => {
         if(!username.trim().length) alert('Enter a valid username')
-            else navigate('/manageRoom?username=' + encodeURIComponent(username) + '&password=' + encodeURIComponent(password || null))
+            else navigate('/manageRoom?username=' + encodeURIComponent(username) + '&password=' + encodeURIComponent(password.trim() || null))
     }
 
     return (

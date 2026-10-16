@@ -8,7 +8,6 @@ import RoomCodeContainer from '../components/RoomCode.jsx'
 function JoinedRoom() {
     const navigate = useNavigate()
     const [searchParams] = useSearchParams()
-    const username = decodeURIComponent(searchParams.get('username')) // dont need username but i am too lazy to remove it
     const roomCode = searchParams.get('roomCode')
 
     const [users, setUsers] = useState([])

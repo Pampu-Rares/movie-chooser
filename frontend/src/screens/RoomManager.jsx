@@ -10,6 +10,7 @@ function RoomManager() {
     const navigate = useNavigate()
     const [searchParams] = useSearchParams()
     const username = decodeURIComponent(searchParams.get('username'))
+    const password = decodeURIComponent(searchParams.get('password'))
 
     const [roomCode, setRoomCode] = useState(() => {
         const sessionRoom = JSON.parse(sessionStorage.getItem('room'))
@@ -38,7 +39,7 @@ function RoomManager() {
     useEffect(() => {
         const handleConnection = () => {
             const sessionRoom = JSON.parse(sessionStorage.getItem('room'))
-            setLoading(false)
+            const accuratePassword = password === "null" ? null : password;
             
             if(sessionRoom) {
                 // implement admin rejoin
@@ -48,15 +49,17 @@ function RoomManager() {
                         ...sessionRoom,
                         id: socket.id
                     }))
+                    setLoading(false)
                 })
             } else {
-                socket.emit('createRoom', username, (code) => {
+                socket.emit('createRoom', username, accuratePassword, (code) => {
                     setRoomCode(code)
                     sessionStorage.setItem('room', JSON.stringify({
                         code: code,
                         id: socket.id
                     }))
                     setUsers([{id: socket.id, name: username}])
+                    setLoading(false)
                 })
             }
         }
@@ -85,6 +88,7 @@ function RoomManager() {
     //connection expired edge case
     useEffect(() => {
         const handleExpiredConnection = () => {
+            setLoading(false)
             sessionStorage.removeItem('room')
             socket.disconnect()
             //sessionStorage.removeItem('votedMovies')
@@ -103,7 +107,7 @@ function RoomManager() {
                 <button id='delete-room' onClick={handleRoomDelete}>Delete Room</button>
                 <h1>Manage room</h1>
                 <p>Socket id: {socket.id/* ? socket.id : 'none'*/}</p> 
-                <RoomCodeContainer roomCode={roomCode} />
+                <RoomCodeContainer roomCode={roomCode} password={password} />
                 <RoomUsers users={users} handleKick={handleKick} isAdmin={true}/>
                 <button id='play' onClick={startGame}>Start game</button>
             </div>

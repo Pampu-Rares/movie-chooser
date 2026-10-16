@@ -8,6 +8,7 @@ function JoinRoom() {
     const navigate = useNavigate()
     const [roomCode, setRoomCode] = useState('')
     const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -18,15 +19,15 @@ function JoinRoom() {
         const correctedRoomCode = roomCode.toUpperCase()
 
         const executeJoin = () => {
-            socket.emit('joinRoom', correctedRoomCode, username, (isSuccess) => {
+            socket.emit('joinRoom', correctedRoomCode, password, username, (isSuccess) => {
                 if(isSuccess) {
                     sessionStorage.setItem('joinedRoom', JSON.stringify({
                         code: correctedRoomCode,
                         id: socket.id
                     }))
-                    navigate('/joinedRoom?username=' + encodeURIComponent(username) + '&roomCode=' + correctedRoomCode)
+                    navigate('/joinedRoom?roomCode=' + correctedRoomCode)
                 } else {
-                    alert('The room code you entered is invalid')
+                    alert('The room code or password is invalid')
                     socket.disconnect()
                 }
             })
@@ -40,6 +41,7 @@ function JoinRoom() {
         }
     }
 
+    // to clean previously joined rooms of this user
     useEffect(() => {
         const oldRoom = JSON.parse(sessionStorage.getItem('room'))
         const oldJoinedRoom = JSON.parse(sessionStorage.getItem('joinedRoom'))
@@ -72,6 +74,7 @@ function JoinRoom() {
             <form id='join-room-form' onSubmit={handleSubmit}>
                 <label htmlFor="enter-code">Enter the room code:<input id='enter-code' type='text' maxLength={10} value={roomCode} onChange={e => {setRoomCode(e.target.value)}}/></label>
                 <label htmlFor="enter-name">Enter an username:<input id='enter-name' type='text' maxLength={20} placeholder='e.g: Ben Dover' value={username} onChange={e => {setUsername(e.target.value)}}/></label>
+                <label htmlFor="enter-password">Enter the room password:<input id='enter-password' type='text' maxLength={20} value={password} onChange={e => {setPassword(e.target.value)}}/></label>
                 <button type='submit'>Enter</button>
             </form>
         </>

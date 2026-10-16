@@ -38,7 +38,7 @@ function ChooseMovieGame() {
     const [roundsPlayed, setRoundsPlayed] = useState(0)
     const [waitingForOthers, setWaitingForOthers] = useState(false)
     const [loading, setLoading] = useState(true) // need to implement this
-    const [error, setError] = useState(false) // set to true to test it properly
+    const [error, setError] = useState(false)
 
 
     //refresh disconnection edge case

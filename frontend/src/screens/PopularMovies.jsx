@@ -105,8 +105,8 @@ function PopularMovies() {
                 ) : movies && movies.length ? (
                     movies.map(movie => <MovieCard movie={movie} key={movie.id} />)
                 ) : !loading && <p>No results. Try searching for something else.</p>}
+                {loading && <Loading />}
             </div>
-            {loading && <Loading />}
         </div>
     )
 }

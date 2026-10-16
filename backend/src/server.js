@@ -67,22 +67,23 @@ const pendingDisconnections = new Map()
 io.on('connection', async (socket) => {
     console.log('Connected: ' + socket.id)
 
-    socket.on('createRoom', (username, handleRoomCode) => {
+    socket.on('createRoom', (username, password, handleRoomCode) => {
         const code = Math.random().toString(36).substring(2, 8).toUpperCase()
         rooms.set(code, {
             users: [{
                 id: socket.id,
                 name: username
             }],
-            admin: socket.id
+            admin: socket.id,
+            password: password
         })
         userRooms.set(socket.id, code)
         socket.join(code)
         handleRoomCode(code)
     })
-    socket.on('joinRoom', (code, username, handleJoin) => {
+    socket.on('joinRoom', (code, password, username, handleJoin) => {
         const currentRoom = rooms.get(code) // check if it doesnt exist
-        if(currentRoom === undefined) {
+        if(currentRoom === undefined || (currentRoom.password && currentRoom.password != password)) {
             handleJoin(false)
             return ;
         }
