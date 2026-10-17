@@ -2,13 +2,13 @@
   font-family: Arial, Helvetica, sans-serif;
   font-size: clamp(20px, 3vw, 25px);
 
-  --background-color: #ddf9f5;
-  --text-color: #081210;
-  --on-primary: var(--text-color);
-  --primary: #34d8e4;
-  --secondary: #8ab7ea;
-  --accent: #5977e1;
-  --on-accent: white;
+  --background-color: #F4F7FC;
+  --text-color: #101B40;
+  --on-primary: var(--background-color);
+  --primary: #4463c9;
+  --secondary: #91a5e5;
+  --accent: #6987ed;
+  --on-accent: var(--background-color);
 }
 
 *, *::before, *::after {

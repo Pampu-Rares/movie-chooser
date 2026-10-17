@@ -164,6 +164,11 @@
     max-width: 90%;
 }
 
+#create-room-container #room-password::placeholder {
+    color: var(--on-primary);
+    opacity: 0.6;
+}
+
 #create-room-container #personal-options-section>p {
     margin: 10px 0;
 }

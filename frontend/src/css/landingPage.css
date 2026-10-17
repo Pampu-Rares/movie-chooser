@@ -54,7 +54,7 @@
     font-size: 1.3rem;
     font-weight: 400;
     background-color: var(--accent);
-    color: var(--text-color);
+    color: var(--on-accent);
     border: 3px solid var(--primary);
 }
 
