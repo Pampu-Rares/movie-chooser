@@ -290,7 +290,7 @@ io.on('connection', async (socket) => {
     socket.on('deleteRoom', (code, handleAdminDeletion) => {
         const oldRoom = rooms.get(code)
         if(!oldRoom) return ;
-        console.log('Deleted room')
+        console.log('Deleted room: ' + code)
         socket.to(code).emit('deletedRoom')
         rooms.delete(code)
         oldRoom.users.forEach(user => {
@@ -302,10 +302,12 @@ io.on('connection', async (socket) => {
 
     socket.on('disconnect', () => {
         // pendingDisconnections map
+        /*
         console.log("Disconnected from room:", userRooms)
         console.log("With user id: ", socket.id)
         console.log("Available rooms:", rooms)
         console.log("Pending disconnections:", pendingDisconnections)
+        */
         if(userRooms.has(socket.id)) {
             console.log('Disconected: ' +  socket.id)
             const disconnectUserTimeout = setTimeout(() => {
@@ -328,10 +330,9 @@ io.on('connection', async (socket) => {
                     }
                 }
                 pendingDisconnections.delete(socket.id)
-                console.log('deleted socket id')
             }, 60 * 1000)
             pendingDisconnections.set(socket.id, disconnectUserTimeout)
-        } else console.log('Tried adding a disconnect timeout, but userRoom was not found')
+        } // else console.log('Tried adding a disconnect timeout, but userRoom was not found')
         
     })
 })
