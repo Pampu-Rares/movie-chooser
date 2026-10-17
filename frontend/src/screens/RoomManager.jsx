@@ -103,7 +103,7 @@ function RoomManager() {
 
     return (
         <div id='room-manager-screen'>
-            <div id='room-manager-container'>
+            <div id='room-manager-container' className={loading ? 'blurred' : ''}>
                 <button id='delete-room' onClick={handleRoomDelete}>Delete Room</button>
                 <h1>Manage room</h1>
                 <p>Socket id: {socket.id/* ? socket.id : 'none'*/}</p> 

@@ -97,7 +97,7 @@ function ChooseMovieGame() {
         // should also set background blur
       }
 
-        socket.on('deleted-room', handleRoomDeletion)
+        socket.on('deletedRoom', handleRoomDeletion)
         socket.on('connection-expired', handleExpiredConnection)
         socket.on('api-error', handleApiError)
         return () => {
@@ -109,7 +109,7 @@ function ChooseMovieGame() {
 
     useEffect(() => {
         const handleMovies = (movies, isNewRound, handleMatches) => {
-          console.log('Received movies')
+          //console.log('Received movies')
           setLoading(false)
           let actualMovies = movies
           if(isNewRound) {
@@ -125,10 +125,9 @@ function ChooseMovieGame() {
           flushSync(() => {
             setAllMovies(movies)
           });
-          console.log(movies)
           const shuffledMovies = shuffleMovies(actualMovies)
           setMovies(shuffledMovies)
-          setRoundsPlayed(current => current+1) // do i need to reset it?
+          setRoundsPlayed(current => current+1) // gets reset with each page refresh
           setCurrentMatch({
             isMatch: false,
             movie: null
@@ -142,10 +141,10 @@ function ChooseMovieGame() {
         }
 
         const handleMatch = movieId => {
-          console.log("Match from:", allMovies)
-          console.log("Match:", movieId)
+          //console.log("Match from:", allMovies)
+          //console.log("Match:", movieId)
           const movieMatch = allMovies.find(movie => movie.id === movieId)
-          console.log('movies on match: ', movies, ' and movie id:', movieId)
+          //console.log('movies on match: ', movies, ' and movie id:', movieId)
           setCurrentMatch({
             isMatch: true,
             movie: movieMatch
@@ -166,8 +165,8 @@ function ChooseMovieGame() {
     useEffect(() => {
 
       const handleMatchesList = (matches) => {
-        console.log('Received matches')
-        console.log(matches, allMovies)
+        //console.log('Received matches')
+        //console.log(matches, allMovies)
         setLoading(false)
         setMatchesList(matches.map(movieId => {
           for(const movie of allMovies) {

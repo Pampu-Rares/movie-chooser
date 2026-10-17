@@ -142,7 +142,7 @@ io.on('connection', async (socket) => {
         updatedLikedMovies[movieId] += 1
         const matches = currentRoom.matches
         if(updatedLikedMovies[movieId] > Math.floor(currentRoom.users.length / 2) && !matches.includes(movieId)) {
-            console.log('Emitting match to everyone: ', movieId)
+            //console.log('Emitting match to everyone: ', movieId)
             io.to(code).emit('match', movieId)
             matches.push(movieId)
         }
@@ -288,9 +288,9 @@ io.on('connection', async (socket) => {
     })
 
     socket.on('deleteRoom', (code, handleAdminDeletion) => {
-        //should add safety checks
         const oldRoom = rooms.get(code)
         if(!oldRoom) return ;
+        console.log('Deleted room')
         socket.to(code).emit('deletedRoom')
         rooms.delete(code)
         oldRoom.users.forEach(user => {

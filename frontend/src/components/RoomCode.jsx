@@ -10,7 +10,7 @@ function RoomCodeContainer({roomCode, password}) {
             {(password!="null" && password != null) && (
                 <div id="room-password-container">
                     <p>Password:</p>
-                    <p id='room-password'>"{password}"</p>
+                    <p id='room-password'>{password}</p>
                 </div>
             ) }
         </div>
