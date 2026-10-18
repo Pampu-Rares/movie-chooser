@@ -67,22 +67,23 @@ const pendingDisconnections = new Map()
 io.on('connection', async (socket) => {
     console.log('Connected: ' + socket.id)
 
-    socket.on('createRoom', (username, handleRoomCode) => {
+    socket.on('createRoom', (username, password, handleRoomCode) => {
         const code = Math.random().toString(36).substring(2, 8).toUpperCase()
         rooms.set(code, {
             users: [{
                 id: socket.id,
                 name: username
             }],
-            admin: socket.id
+            admin: socket.id,
+            password: password
         })
         userRooms.set(socket.id, code)
         socket.join(code)
         handleRoomCode(code)
     })
-    socket.on('joinRoom', (code, username, handleJoin) => {
+    socket.on('joinRoom', (code, password, username, handleJoin) => {
         const currentRoom = rooms.get(code) // check if it doesnt exist
-        if(currentRoom === undefined) {
+        if(currentRoom === undefined || (currentRoom.password && currentRoom.password != password)) {
             handleJoin(false)
             return ;
         }
@@ -141,7 +142,7 @@ io.on('connection', async (socket) => {
         updatedLikedMovies[movieId] += 1
         const matches = currentRoom.matches
         if(updatedLikedMovies[movieId] > Math.floor(currentRoom.users.length / 2) && !matches.includes(movieId)) {
-            console.log('Emitting match to everyone: ', movieId)
+            //console.log('Emitting match to everyone: ', movieId)
             io.to(code).emit('match', movieId)
             matches.push(movieId)
         }
@@ -287,9 +288,9 @@ io.on('connection', async (socket) => {
     })
 
     socket.on('deleteRoom', (code, handleAdminDeletion) => {
-        //should add safety checks
         const oldRoom = rooms.get(code)
         if(!oldRoom) return ;
+        console.log('Deleted room: ' + code)
         socket.to(code).emit('deletedRoom')
         rooms.delete(code)
         oldRoom.users.forEach(user => {
@@ -301,10 +302,12 @@ io.on('connection', async (socket) => {
 
     socket.on('disconnect', () => {
         // pendingDisconnections map
+        /*
         console.log("Disconnected from room:", userRooms)
         console.log("With user id: ", socket.id)
         console.log("Available rooms:", rooms)
         console.log("Pending disconnections:", pendingDisconnections)
+        */
         if(userRooms.has(socket.id)) {
             console.log('Disconected: ' +  socket.id)
             const disconnectUserTimeout = setTimeout(() => {
@@ -327,10 +330,9 @@ io.on('connection', async (socket) => {
                     }
                 }
                 pendingDisconnections.delete(socket.id)
-                console.log('deleted socket id')
             }, 60 * 1000)
             pendingDisconnections.set(socket.id, disconnectUserTimeout)
-        } else console.log('Tried adding a disconnect timeout, but userRoom was not found')
+        } // else console.log('Tried adding a disconnect timeout, but userRoom was not found')
         
     })
 })

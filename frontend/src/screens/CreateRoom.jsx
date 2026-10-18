@@ -5,13 +5,15 @@ import { useNavigate } from 'react-router-dom'
 
 function CreateRoom() {
     const navigate = useNavigate()
-    const [selectedSource, setSelectedSource] = useState('ms-all')
+    const [selectedSource, setSelectedSource] = useState('ms-all') // not yet an available feature
     const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
     const [showDialog, setShowDialog] = useState(false)
 
     const handleFormSubmit = (e) => {
         e.preventDefault()
-        setShowDialog(true)
+        if(password==="null") alert('Password cannot be "null"')
+        else setShowDialog(true)
     }
     const handleCancel = () => {
         setShowDialog(false)
@@ -19,7 +21,7 @@ function CreateRoom() {
 
     const handleNameEnter = () => {
         if(!username.trim().length) alert('Enter a valid username')
-            else navigate('/manageRoom?username=' + encodeURIComponent(username))
+            else navigate('/manageRoom?username=' + encodeURIComponent(username) + '&password=' + encodeURIComponent(password.trim() || null))
     }
 
     return (
@@ -28,7 +30,7 @@ function CreateRoom() {
             <form id='create-room-form' className={!showDialog ? 'visible' : 'hidden'} onSubmit={handleFormSubmit}>
                 <div id='password-container'>
                     <label htmlFor='room-password'>Room password</label>
-                    <input id='room-password' type='text' maxLength={20} placeholder='Optional'></input>
+                    <input id='room-password' value={password} onChange={(e) => setPassword(e.target.value)}type='text' maxLength={20} placeholder='Optional'></input>
                 </div>
                 <p id='ms-label'>Movie Source</p>
                 <div id='movie-source'>

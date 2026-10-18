@@ -45,6 +45,14 @@
     font-size: 1.3rem;
 }
 
+#room-manager-container #play:hover {
+    transform: scale(1.03);
+}
+
+#room-manager-container.blurred {
+    filter: blur(14px);
+}
+
 @media (max-width: 380px) {
     #room-manager-container {
         font-size: 0.7rem;

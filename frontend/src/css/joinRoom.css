@@ -4,7 +4,7 @@
     min-height: 45vh;
     background-color: var(--primary);
     border-radius: 15px;
-    width: clamp(50px, 80%, 600px);
+    width: clamp(50px, 80%, 650px);
     padding: 20px;
 
     display: flex;
@@ -21,6 +21,7 @@
     justify-content: center;
     align-items: center;
     gap: 15px;
+    color: var(--on-primary);
 }
 
 #join-room-form input {
@@ -39,7 +40,7 @@
     max-width: 10ch;
 }
 
-#join-room-form #enter-name {
+#join-room-form #enter-name, #join-room-form #enter-password {
     max-width: 17ch;
 }
 

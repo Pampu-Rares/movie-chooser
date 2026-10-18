@@ -76,6 +76,7 @@ Create or join a room with your friends and press play. The socket.io server the
 ### Movie Finder
 
 - Create or join a room alongside your friends and start voting
+- The admin can set a room password for extra safety
 - The room can be as big as you'd like
 - At the end of the 10 shown movies, the room admin can choose to play again if the movies were unsatisfactory.
 
