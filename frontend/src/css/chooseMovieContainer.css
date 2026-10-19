@@ -21,6 +21,8 @@
 
 #movie-finder-container .blur {
     filter: blur(18px);
+    user-select: none;
+    pointer-events: none;
 }
 
 #game-container #waiting-others {

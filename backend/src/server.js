@@ -67,7 +67,7 @@ const pendingDisconnections = new Map()
 io.on('connection', async (socket) => {
     console.log('Connected: ' + socket.id)
 
-    socket.on('createRoom', (username, password, handleRoomCode) => {
+    socket.on('createRoom', (username, password, ms, countryCode, handleRoomCode) => {
         const code = Math.random().toString(36).substring(2, 8).toUpperCase()
         rooms.set(code, {
             users: [{
@@ -75,7 +75,8 @@ io.on('connection', async (socket) => {
                 name: username
             }],
             admin: socket.id,
-            password: password
+            password: password,
+            msOptions: [ms, countryCode]
         })
         userRooms.set(socket.id, code)
         socket.join(code)
@@ -111,10 +112,11 @@ io.on('connection', async (socket) => {
     socket.on('startGame', async (room) => {
         io.to(room).emit('startGame')
         try {
-            const movies = await getGameMovies(10, apiKey)
+            const currentRoom = rooms.get(room)
+            const [ms, countryCode] = currentRoom.msOptions
+            const movies = await getGameMovies(10, ms, countryCode, apiKey)
             const likedMovies = {}
             movies.forEach(movie => {likedMovies[movie.id] = 0});
-            const currentRoom = rooms.get(room)
             rooms.set(room, {
                 ...currentRoom,
                 movies: movies,

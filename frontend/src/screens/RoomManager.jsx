@@ -11,6 +11,8 @@ function RoomManager() {
     const [searchParams] = useSearchParams()
     const username = decodeURIComponent(searchParams.get('username'))
     const password = decodeURIComponent(searchParams.get('password'))
+    const msSource = searchParams.get('ms')
+    const countryCode = searchParams.get('country_code')
 
     const [roomCode, setRoomCode] = useState(() => {
         const sessionRoom = JSON.parse(sessionStorage.getItem('room'))
@@ -52,7 +54,7 @@ function RoomManager() {
                     setLoading(false)
                 })
             } else {
-                socket.emit('createRoom', username, accuratePassword, (code) => {
+                socket.emit('createRoom', username, accuratePassword, msSource, countryCode, (code) => {
                     setRoomCode(code)
                     sessionStorage.setItem('room', JSON.stringify({
                         code: code,

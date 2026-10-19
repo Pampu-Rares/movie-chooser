@@ -13,7 +13,7 @@ export async function searchMovies(query) {
     return searchResult
 }
 
-export async function getGameMovies(number, apiKey) {
+export async function getGameMovies(number, ms, countryCode, apiKey) {
     const page = Math.floor(Math.random() * 60) + 1
     let result = await fetch(`https://api.themoviedb.org/3/discover/movie?page=${page}&api_key=${apiKey}`)
     result = await result.json()
