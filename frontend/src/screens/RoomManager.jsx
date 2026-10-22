@@ -67,7 +67,7 @@ function RoomManager() {
         }
 
         const handleUsers = (userId, users) => {
-            console.log(users)
+            //console.log(users)
             setUsers(users)
         }
 

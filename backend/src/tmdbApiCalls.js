@@ -14,8 +14,29 @@ export async function searchMovies(query) {
 }
 
 export async function getGameMovies(number, ms, countryCode, apiKey) {
-    const page = Math.floor(Math.random() * 60) + 1
-    let result = await fetch(`https://api.themoviedb.org/3/discover/movie?page=${page}&api_key=${apiKey}`)
-    result = await result.json()
-    return result.results.filter(movie => !movie.softcore && !movie.adult && movie.vote_count > 1500).slice(0, 10)
+    const msServices = {
+        'ms-all': 'Any',
+        'ms-netflix': 8,
+        'ms-disney': 337,
+        'ms-hbo': 1899
+    }
+    
+    //console.log('Selected ms: ' + ms)
+    const exploredPages = []
+    let page = Math.floor(Math.random() * 60) + 1
+    let result = []
+    let dataFetch
+    while(result.length < 10)
+    {
+        while(exploredPages.includes(page))
+            page = Math.floor(Math.random() * 60) + 1
+        exploredPages.push(page)
+        if(ms == 'ms-all')
+            dataFetch = await fetch(`https://api.themoviedb.org/3/discover/movie?page=${page}&api_key=${apiKey}`)
+        else dataFetch = await fetch(`https://api.themoviedb.org/3/discover/movie?page=${page}&api_key=${apiKey}&with_watch_providers=${msServices[ms]}${countryCode ?'&watch_region=' + countryCode : ''}`)
+        dataFetch = await dataFetch.json()
+        result.push(...dataFetch.results.filter(movie => !movie.softcore && !movie.adult && movie.vote_count > 1500))
+        result = result.slice(0, 10)
+    }
+    return result
 }

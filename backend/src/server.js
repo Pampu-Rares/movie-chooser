@@ -114,6 +114,8 @@ io.on('connection', async (socket) => {
         try {
             const currentRoom = rooms.get(room)
             const [ms, countryCode] = currentRoom.msOptions
+            console.log(ms, countryCode)
+
             const movies = await getGameMovies(10, ms, countryCode, apiKey)
             const likedMovies = {}
             movies.forEach(movie => {likedMovies[movie.id] = 0});

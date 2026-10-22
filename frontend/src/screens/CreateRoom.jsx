@@ -43,7 +43,7 @@ function CreateRoom() {
 
     const handleNameEnter = () => {
         if(!username.trim().length) alert('Enter a valid username')
-            else navigate('/manageRoom?username=' + encodeURIComponent(username) + '&password=' + encodeURIComponent(password.trim() || null) + '&ms='+ {selectedSource} + '&country_code=' + countryCodeRef.current)
+            else navigate('/manageRoom?username=' + encodeURIComponent(username) + '&password=' + encodeURIComponent(password.trim() || null) + '&ms='+ selectedSource + '&country_code=' + countryCodeRef.current)
     }
 
     return (

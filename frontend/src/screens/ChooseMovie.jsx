@@ -78,22 +78,29 @@ function ChooseMovieGame() {
     //room deletion edge case
     useEffect(() => {
       const handleRoomDeletion = () => {
+        const isAdmin = JSON.parse(sessionStorage.getItem('room'))
         sessionStorage.removeItem('room') // admin's room
         sessionStorage.removeItem('joinedRoom')
         sessionStorage.removeItem('votedMovies')
         socket.disconnect()
-        navigate('/joinRoom')
+        if(isAdmin)
+          navigate('/createRoom')
+        else navigate('/joinRoom')
       }
 
       const handleExpiredConnection = () => {
-            sessionStorage.removeItem('room') // admin's room
-            sessionStorage.removeItem('votedMovies')
-            socket.disconnect()
-            navigate('/joinRoom')
+        const isAdmin = JSON.parse(sessionStorage.getItem('room'))
+        sessionStorage.removeItem('room') // admin's room
+        sessionStorage.removeItem('votedMovies')
+        socket.disconnect()
+        if(isAdmin)
+          navigate('/createRoom')
+        else navigate('/joinRoom')
       }
 
       const handleApiError = () => {
         setError(true)
+        setLoading(false)
         // should also set background blur
       }
 
