@@ -1,9 +1,10 @@
 # Movie Finder App
 A full-stack web application which helps you choose the next movie to watch by yourself or alongside your friends.
-- this project uses React, Node.js, Socket.io, and TMDB API
+- this project uses  Vite, React, Node.js, Socket.io, and TMDB API
+- in addition, the ipapi API is briefly used for access to the local country code
 
 ![A depiction of how the main page looks](./readme_media/main.png)
-- You can check out a demo of this page [here](https://moviefinderpage.vercel.app).
+You can check out a demo of this page [here](https://moviefinderpage.vercel.app).
 
 ## Getting Started
 
@@ -12,15 +13,17 @@ A full-stack web application which helps you choose the next movie to watch by y
 This project requires Node.js.
 - If you do not have Node.js installed, you can install it from [here](https://nodejs.org/en/download);
 
+In addition, an API key for TMDB is necessary for the source of the movies. If you do not have an API key, you can create one from the TMDB official website
+
 ### Installation
 
 1. Paste this line into your terminal:
 
 ```shell
-git  clone  https://github.com/Pampu-Rares/movie-chooser.git
+git clone https://github.com/Pampu-Rares/movie-chooser.git
 ```
 
-2. There are two main folders in this project: `backend` and `frontend`.
+2. The project is organised into a monorepo with two main folders: `backend` and `frontend`.
 
 ### Backend
 
@@ -71,7 +74,7 @@ npm run dev
 
 ## Usage
 
-Create or join a room with your friends and press play. The socket.io server then sends the room up to 10 movies to like or dislike based on your preferences. If more than half of the people in the room like a certain movie, it will appear as a match. At the end of all of the movies, the room admin can choose to play again if the movies were unsatisfactory.
+Create or join a room with your friends and press play. The socket.io server then sends the room a list of 10 movies to like or dislike based on your preferences. If more than half of the people in the room like a certain movie, it will appear as a match. At the end of all of the movies, the room admin can choose to play again if the movies were unsatisfactory.
 
 ### Movie Finder
 
