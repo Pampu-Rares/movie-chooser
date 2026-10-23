@@ -51,6 +51,8 @@
 
 #room-manager-container.blurred {
     filter: blur(14px);
+    pointer-events: none;
+    user-select: none;
 }
 
 @media (max-width: 380px) {

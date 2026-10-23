@@ -16,6 +16,10 @@
     justify-content: center;
 }
 
+#error-dialog h3 {
+    color: var(--text-color);
+}
+
 #error-dialog #return-button {
     background-color: var(--primary);
     color: var(--on-primary);

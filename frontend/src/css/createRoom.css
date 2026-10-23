@@ -90,6 +90,7 @@
 /* #region: specifying-grid-areas */
 #ms-all {
     grid-area: all-option;
+    border-bottom: 3px solid var(--background-color);
 }
 
 #ms-netflix {
