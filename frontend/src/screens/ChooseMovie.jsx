@@ -37,6 +37,7 @@ function ChooseMovieGame() {
     const [matchesList, setMatchesList] = useState([])
     const [roundsPlayed, setRoundsPlayed] = useState(0)
     const [waitingForOthers, setWaitingForOthers] = useState(false)
+    const [isAdmin, setIsAdmin] = useState(false)
     const [loading, setLoading] = useState(true) // need to implement this
     const [error, setError] = useState(false)
 
@@ -47,6 +48,7 @@ function ChooseMovieGame() {
             setSocketId(socket.id)
             const roomAdmin = JSON.parse(sessionStorage.getItem('room'))
             if(roomAdmin) {
+              setIsAdmin(true)
               socket.emit('rejoinAdmin', roomAdmin.code, roomAdmin.id, () => {
                   sessionStorage.setItem('room', JSON.stringify({
                       ...roomAdmin,
@@ -67,6 +69,9 @@ function ChooseMovieGame() {
         }
         if(!socket.connected) {
             socket.connect()
+        } else {
+          const roomAdmin = JSON.parse(sessionStorage.getItem('room'))
+          if(roomAdmin) setIsAdmin(true)
         }
         socket.on('connect', handleConnection)
 
@@ -237,10 +242,24 @@ function ChooseMovieGame() {
     const handleErrorReturnBtn = () => {
       navigate('/')
     }
+
+    const handleRoomChange = () => {
+      if(isAdmin) {
+        sessionStorage.removeItem('room')
+        socket.emit('deleteRoom', roomCode, () => {
+            socket.disconnect()
+            navigate('/')
+        })
+      } else  socket.emit('leaveRoom', roomCode, () => {
+                navigate('/joinRoom')
+              })
+    }
+
     // test the movies && movies.length !== 0 stuff
     return (
         <div id='movie-finder-container'>
           <div id='game-container' className={currentMatch.isMatch || error || loading ? 'blur' : ''}>
+              <button id='room-action-button' className={isAdmin ? "delete-room" : "exit-room"} onClick={handleRoomChange}>{isAdmin ? "Delete Room" : "Leave Room"}</button>
               <p>Socket id: {socketId}</p>
               {matchesList.length ? (
                 <MatchesList matches={matchesList} roomCode={roomCode}/>

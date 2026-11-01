@@ -19,7 +19,7 @@
         "skip";
     align-items: center;
     justify-items: center;
-    gap: 10px;
+    gap: auto;
 
     transition: opacity 0.8s ease;
 }
@@ -35,7 +35,7 @@
 #poster-container {
     grid-area: poster;
 
-    width: clamp(20px, 70vw, 400px);
+    width: clamp(20px, 40vw, 400px);
     border-radius: 20px;
     overflow: hidden;
 }
