@@ -8,6 +8,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import ErrorDialog from '../components/ErrorDialog.jsx'
 import Loading from '../components/Loading.jsx'
 import {flushSync} from 'react-dom'
+import MovieVisualiser from '../components/MovieVisualiser.jsx'
 
 function shuffleMovies(movies) {
     for(let i = movies.length - 1; i > 0; i--) {
@@ -34,6 +35,7 @@ function ChooseMovieGame() {
       isMatch: false,
       movie: null
     })
+    const [visualisedMovie, setVisualisedMovie] = useState(null)
     const [matchesList, setMatchesList] = useState([])
     const [roundsPlayed, setRoundsPlayed] = useState(0)
     const [waitingForOthers, setWaitingForOthers] = useState(false)
@@ -238,6 +240,16 @@ function ChooseMovieGame() {
         isMatch: false,
       }))
     }
+    const acceptMatch = () => {
+      setCurrentMatch(prev => ({
+        ...prev,
+        isMatch: false,
+      }))
+      setVisualisedMovie(currentMatch.movie)
+    }
+    const handleMovieVisualiserClose = () => {
+      setVisualisedMovie(null)
+    }
 
     const handleErrorReturnBtn = () => {
       navigate('/')
@@ -258,7 +270,7 @@ function ChooseMovieGame() {
     // test the movies && movies.length !== 0 stuff
     return (
         <div id='movie-finder-container'>
-          <div id='game-container' className={currentMatch.isMatch || error || loading ? 'blur' : ''}>
+          <div id='game-container' className={currentMatch.isMatch || visualisedMovie || error || loading ? 'blur' : ''}>
               <button id='room-action-button' className={isAdmin ? "delete-room" : "exit-room"} onClick={handleRoomChange}>{isAdmin ? "Delete Room" : "Leave Room"}</button>
               <p>Socket id: {socketId}</p>
               {matchesList.length ? (
@@ -271,9 +283,10 @@ function ChooseMovieGame() {
                 movies && movies.length !== 0 && <MovieSelector movie={currentMovieOption.movie} handleDislike={handleDislike} handleLike={handleLike} like={like} dislike={dislike}/>
                 )}
           </div>
-          <MatchDialog ref={matchRef} match={currentMatch} skipMatch={skipMatch}/>
+          <MatchDialog ref={matchRef} match={currentMatch} skipMatch={skipMatch} acceptMatch={acceptMatch}/>
           {error && <ErrorDialog message={'There was an error with the TMDB server.'} handleReturn={handleErrorReturnBtn}/>}
           {loading && <Loading />}
+          <MovieVisualiser movie={MovieVisualiser} handleClose={handleMovieVisualiserClose} />
         </div>
     )
 }
