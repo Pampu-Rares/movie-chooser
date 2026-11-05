@@ -1,21 +1,35 @@
+import '../css/components-css/movieVisualiser.css'
 import {useState, useEffect} from 'react'
 
 function MovieVisualiser({movie, handleClose}) {
-    const [movieDescription, setMovieDescription] = useState(movie.overview) // not sure I need it
+    console.log(movie)
+    const [movieDescription, setMovieDescription] = useState(null)
+    const [movieTitle, setMovieTitle] = useState(null)
     const [ratingIcon, setRatingIcon] = useState(null) // for now
+
+    useEffect(() => {
+        if(movie) {
+            if(Object.hasOwn(movie, 'overview'))
+                setMovieDescription(movie.overview)
+            else setMovieDescription('A description isn\'t available for this movie')
+            if(Object.hasOwn(movie, 'title'))
+                setMovieTitle(movie.title)
+            else setMovieTitle('Movie')
+        }
+    }, [movie])
 
     // movie-image may be already taken as id for img
     // maybe an icon/svg would be better than img for votes and voter icons
     return (
         <>
         {movie && (
-            <div id='movie-visualiser-container'>
-            <h4>{movie.movieTitle}</h4>
-            <div id='movie-image-container'>
-                <img id='movie-image' src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} />
+        <div id='movie-visualiser-container'>
+            <h4>{movieTitle}</h4>
+            <span id='movie-visualiser-release-date'>{movie.release_date}</span>
+            <div id='movie-visualiser-image-container'>
+                <img id='movie-image-visualiser' src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} />
             </div>
-            <p id='movie-description'>{movieDescription}</p>
-            <span id='release-date'>{movie.release_date}</span>
+            <p id='movie-visualiser-description'>{movieDescription}</p>
             <div id='rating-div'>
                 <div id='rating-score-container'>
                     <span id='rating-score-span'>{movie.vote_average}</span>
@@ -30,7 +44,7 @@ function MovieVisualiser({movie, handleClose}) {
                     {')'}
                 </div>
             </div>
-
+            <button id='close-movie-visualiser-btn' onClick={handleClose}>Close</button>
         </div>
         )}
         </>

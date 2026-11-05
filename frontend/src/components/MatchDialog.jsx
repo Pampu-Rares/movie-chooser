@@ -1,4 +1,4 @@
-import '../css/matchDialog.css'
+import '../css/components-css/matchDialog.css'
 
 function MatchDialog({ match, skipMatch, acceptMatch }) {
     console.log(match)

@@ -1,4 +1,4 @@
-import '../css/roomCode.css'
+import '../css/components-css/roomCode.css'
 
 function RoomCodeContainer({roomCode, password}) {
     return (

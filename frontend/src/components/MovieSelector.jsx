@@ -1,4 +1,4 @@
-import '../css/movieSelector.css'
+import '../css/components-css/movieSelector.css'
 import { useState } from 'react'
 
 function MovieSelector({movie, handleDislike, handleLike, like, dislike}) {

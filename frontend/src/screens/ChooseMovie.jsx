@@ -286,7 +286,7 @@ function ChooseMovieGame() {
           <MatchDialog ref={matchRef} match={currentMatch} skipMatch={skipMatch} acceptMatch={acceptMatch}/>
           {error && <ErrorDialog message={'There was an error with the TMDB server.'} handleReturn={handleErrorReturnBtn}/>}
           {loading && <Loading />}
-          <MovieVisualiser movie={MovieVisualiser} handleClose={handleMovieVisualiserClose} />
+          <MovieVisualiser movie={visualisedMovie} handleClose={handleMovieVisualiserClose} />
         </div>
     )
 }

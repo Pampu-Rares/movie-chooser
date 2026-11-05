@@ -1,0 +1,40 @@
+#movie-visualiser-container {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    margin: auto;
+    margin-top: 20px;
+    width: fit-content;
+    max-width: 80vw;
+    height: fit-content;
+    max-height: 90vh; 
+    padding: clamp(2px, 3vw, 20px);
+    border-radius: 15px;
+    background-color: var(--primary);
+    color: var(--on-primary);
+    
+    display: flex;
+    flex-direction: column;
+}
+
+#movie-visualiser-container h4 {
+    font-size: 1.3rem;
+}
+
+#movie-visualiser-container #rating-div {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: clamp(2px, 2vw, 10px);
+}
+
+#movie-visualiser-container #close-movie-visualiser-btn {
+    background-color: var(--secondary);
+    color: var(--text-color);
+    font-size: 1.0rem;
+    width: fit-content;
+    max-width: 80%;
+    padding-left: clamp(5px, 5vw, 100px);
+    padding-right: clamp(5px, 5vw, 100px);
+    align-self: center;
+}

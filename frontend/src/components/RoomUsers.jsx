@@ -1,4 +1,4 @@
-import '../css/roomUsersComponent.css'
+import '../css/components-css/roomUsersComponent.css'
 
 function RoomUsers({users, handleKick, isAdmin}) {
     return (
