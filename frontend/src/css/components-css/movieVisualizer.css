@@ -12,13 +12,16 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    * {
+    > * {
         transition: opacity 0.3s ease;
     }
 }
 
 #movie-visualizer-container {
-    
+    width: fit-content;
+    max-width: 80vw;
+    height: fit-content;
+    max-height: 90vh;
     overflow-y: scroll;
     padding: clamp(2px, 3vw, 20px);
     border-radius: 15px;
@@ -116,15 +119,55 @@
 }
 
 #close-movie-visualizer-btn {
+    padding:  15px 30%;
     grid-area: close-visualizer-btn;
     background-color: var(--secondary);
     color: var(--text-color);
     font-size: 1.0rem;
     width: fit-content;
     max-width: 100%;
-    padding-left: clamp(5px, 5vw, 100px);
-    padding-right: clamp(5px, 5vw, 100px);
     justify-self: center;
+}
+
+#search-on-google-modal {
+    position: absolute;
+    margin: auto;
+    padding: clamp(3px, 2vw, 15px);
+    border-radius: 15px;
+    background-color: var(--secondary);
+    color: var(--text-color);
+    max-width: 500px;
+
+    * {
+        margin: 10px 0;
+    }
+
+    h5 {
+        font-size: 1.1rem;
+        margin-bottom: 20px;
+    }
+}
+
+#google-search-modal-options {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: clamp(10px, 5vw, 20px);
+}
+
+#google-search-modal-options button {
+    font-size: 0.8rem;
+    transition: transform 0.3s ease;
+}
+
+#close-google-modal {
+    border: none;
+}
+
+#continue-with-google-search {
+    background-color: var(--accent);
+    color: var(--on-accent);
+    border: 2px solid var(--primary);
 }
 
 #movie-visualizer-options-container .hidden {
@@ -133,15 +176,18 @@
     pointer-events: none;
 }
 
-@media (min-width: 720px) {
+@media (min-width: 1028px) {
     #movie-visualizer-container {
         grid-template-columns: repeat(3, 1fr);
         grid-template-areas: 
-        "movie-poster movie-title"
-        "movie-poster movie-release-date"
-        "movie-poster movie-description"
-        "movie-poster movie-action-buttons"
-        "movie-poster movie-rating"
-        "movie-poster close-visualizer-btn";
-    }  
+        "movie-poster movie-title movie-action-buttons"
+        "movie-poster movie-release-date movie-action-buttons"
+        "movie-poster movie-description movie-action-buttons"
+        "movie-poster movie-rating movie-action-buttons"
+        "close-visualizer-btn close-visualizer-btn close-visualizer-btn";
+    }
+
+    #close-movie-visualizer-btn {
+        padding:  15px 30%;
+    }
 }

@@ -66,7 +66,7 @@ function MovieVisualizer({movie, handleClose}) {
                     </div>
                 </div>
                 <div id='movie-visualizer-action-btns'>
-                    <button id='search-on-google'>Search</button>
+                    <button id='search-on-google' onClick={() => setIsGoogleModalOpen(true)}>Search</button>
                     <button id='watchlist'>Add to Watchlist</button>
                 </div>
                 <button id='close-movie-visualizer-btn' onClick={handleClose}>Close</button>
@@ -74,7 +74,7 @@ function MovieVisualizer({movie, handleClose}) {
             )}
             <div id='search-on-google-modal' className={!isGoogleModalOpen ? 'hidden' : ''}>
                 <h5>Attention</h5>
-                <p>This action will close the current room and send you to the Google page of the movie</p>
+                <p>This action will close the current room and redirect you to the Google search page of this movie.</p>
                 <div id='google-search-modal-options'>
                     <button id='continue-with-google-search'>Continue</button>
                     <button id='close-google-modal' onClick={() => setIsGoogleModalOpen(false)}>Return</button>
