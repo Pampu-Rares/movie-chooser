@@ -8,6 +8,7 @@ function MovieVisualizer({movie, handleClose}) {
     const [ratingIcon, setRatingIcon] = useState(null) // for now
     const [voteRating, setVoteRating] = useState(null)
     const [voteCount, setVoteCount] = useState(null)
+    const [releaseDate, setReleaseDate] = useState(null)
     const [isGoogleModalOpen, setIsGoogleModalOpen] = useState(false)
 
     useEffect(() => {
@@ -36,6 +37,11 @@ function MovieVisualizer({movie, handleClose}) {
                 setVoteCount(initialVoteCount)
             }
             else setVoteCount('0')
+            if(Object.hasOwn(movie, 'release_date')) {
+                let releaseDate = movie.release_date
+                releaseDate = releaseDate.split('-');
+                setReleaseDate(`${releaseDate[2]}/${releaseDate[1]}/${releaseDate[0]}`)
+            } else setReleaseDate('0/0/0')
         }
     }, [movie])
 
@@ -46,7 +52,7 @@ function MovieVisualizer({movie, handleClose}) {
             {movie && (
             <div id='movie-visualizer-container' className={isGoogleModalOpen ? 'hidden' : ''}>
                 <h4>{movieTitle}</h4>
-                <span id='movie-visualizer-release-date'>{movie.release_date}</span>
+                <span id='movie-visualizer-release-date'>{releaseDate}</span>
                 <div id='movie-visualizer-image-container'>
                     <img id='movie-image-visualizer' src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} />
                 </div>

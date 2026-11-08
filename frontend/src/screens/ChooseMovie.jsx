@@ -23,7 +23,7 @@ function ChooseMovieGame() {
     const [searchParams] = useSearchParams()
     const roomCode = searchParams.get('roomCode')
 
-    const matchRef = useRef(null) // not working as intended
+    const matchRef = useRef(null)
 
     const [socketId, setSocketId] = useState(socket.id)
     const [movies, setMovies] = useState([])
