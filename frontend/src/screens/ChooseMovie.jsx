@@ -9,6 +9,7 @@ import ErrorDialog from '../components/ErrorDialog.jsx'
 import Loading from '../components/Loading.jsx'
 import {flushSync} from 'react-dom'
 import MovieVisualiser from '../components/MovieVisualiser.jsx'
+import searchOnGoogle from '../services/googleSearch.js'
 
 function shuffleMovies(movies) {
     for(let i = movies.length - 1; i > 0; i--) {
@@ -105,6 +106,10 @@ function ChooseMovieGame() {
         else navigate('/joinRoom')
       }
 
+      const handleSearch = title => {
+        searchOnGoogle(title)
+      }
+
       const handleApiError = () => {
         setError(true)
         setLoading(false)
@@ -113,6 +118,7 @@ function ChooseMovieGame() {
 
         socket.on('deletedRoom', handleRoomDeletion)
         socket.on('connection-expired', handleExpiredConnection)
+        socket.on('search-on-google', handleSearch)
         socket.on('api-error', handleApiError)
         return () => {
             socket.off('deleted-room', handleRoomDeletion)
@@ -286,7 +292,7 @@ function ChooseMovieGame() {
           <MatchDialog ref={matchRef} match={currentMatch} skipMatch={skipMatch} acceptMatch={acceptMatch}/>
           {error && <ErrorDialog message={'There was an error with the TMDB server.'} handleReturn={handleErrorReturnBtn}/>}
           {loading && <Loading />}
-          <MovieVisualiser movie={visualisedMovie} handleClose={handleMovieVisualiserClose} />
+          <MovieVisualiser movie={visualisedMovie} roomId={roomCode} handleClose={handleMovieVisualiserClose} />
         </div>
     )
 }

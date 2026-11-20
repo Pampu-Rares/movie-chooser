@@ -105,7 +105,10 @@ io.on('connection', async (socket) => {
 
     socket.on('getRoomUsers', (code, handleRoomUsers) => {
         const room = rooms.get(code)
-        if(!room) return ;
+        if(!room) {
+            socket.emit('deletedRoom')
+            return ;
+        } 
         handleRoomUsers(room.users)
     })
     
@@ -140,6 +143,7 @@ io.on('connection', async (socket) => {
         const currentRoom = rooms.get(code)
         if(!currentRoom) {
             io.to(code).emit('deletedRoom')
+            socket.emit('deletedRoom')
             return ;
         } 
         const updatedLikedMovies = currentRoom.likedMovies
@@ -338,5 +342,26 @@ io.on('connection', async (socket) => {
             pendingDisconnections.set(socket.id, disconnectUserTimeout)
         } // else console.log('Tried adding a disconnect timeout, but userRoom was not found')
         
+    })
+
+    socket.on('google-search', (movieTitle) => {
+        const roomId = userRooms.get(socket.id) // need to test this
+        io.to(roomId).emit('search-on-google', movieTitle)
+        const room = rooms.get(roomId)
+        if(room) {
+            if(room.admin === socket.id) {
+                rooms.delete(roomId)
+                io.to(roomId).emit('deletedRoom')
+                io.in(roomId).socketsLeave(roomId)
+            } 
+            else {
+                const newUsers = room.users.filter(user => user.id !== socket.id)
+                rooms.set(roomId, {
+                    ...room,
+                    users: newUsers
+                })
+                socket.to(roomId).emit('userLeft', socket.id, newUsers)
+            }
+        }
     })
 })

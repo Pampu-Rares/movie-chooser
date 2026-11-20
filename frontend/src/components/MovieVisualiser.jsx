@@ -1,7 +1,8 @@
 import '../css/components-css/movieVisualizer.css'
 import {useState, useEffect} from 'react'
+import {socket} from '../services/socketLogic'
 
-function MovieVisualizer({movie, handleClose}) {
+function MovieVisualizer({movie, roomId, handleClose}) {
     console.log(movie)
     const [movieDescription, setMovieDescription] = useState(null)
     const [movieTitle, setMovieTitle] = useState(null)
@@ -45,6 +46,10 @@ function MovieVisualizer({movie, handleClose}) {
         }
     }, [movie])
 
+    const handleGoogleSearch = () => {
+        socket.emit('google-search', movie.title)
+    }
+
     // movie-image may be already taken as id for img
     // maybe an icon/svg would be better than img for votes and voter icons
     return (
@@ -82,7 +87,7 @@ function MovieVisualizer({movie, handleClose}) {
                 <h5>Attention</h5>
                 <p>This action will close the current room and redirect you to the Google search page of this movie.</p>
                 <div id='google-search-modal-options'>
-                    <button id='continue-with-google-search'>Continue</button>
+                    <button id='continue-with-google-search' onClick={handleGoogleSearch}>Continue</button>
                     <button id='close-google-modal' onClick={() => setIsGoogleModalOpen(false)}>Return</button>
                 </div>
             </div>
