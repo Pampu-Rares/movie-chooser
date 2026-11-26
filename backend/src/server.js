@@ -17,13 +17,7 @@ const apiKey = process.env.API_KEY
 app.use(express.json())
 
 app.get('/', async (req, res) => {
-    try {
-        const popularMovies = await getPopularMovies()
-        res.json(popularMovies)
-    } catch(err) {
-        console.log('API error: ' + err.message || err)
-        res.status(500).json({message: "Server could not fetch popular movies"})
-    }
+    res.json({message: 'This server is now operational'})
 })
 
 app.get('/popularMovies', async (req, res) => {
@@ -86,6 +80,7 @@ io.on('connection', async (socket) => {
         const currentRoom = rooms.get(code) // check if it doesnt exist
         if(currentRoom === undefined || (currentRoom.password && currentRoom.password != password)) {
             handleJoin(false)
+            console.log('Incorrect password')
             return ;
         }
         const newUsersArray = [...currentRoom.users, {
@@ -107,15 +102,21 @@ io.on('connection', async (socket) => {
         const room = rooms.get(code)
         if(!room) {
             socket.emit('deletedRoom')
+            io.to(room).emit('deletedRoom')
             return ;
         } 
         handleRoomUsers(room.users)
     })
     
     socket.on('startGame', async (room) => {
+        const currentRoom = rooms.get(room)
+        if(!currentRoom) {
+            socket.emit('deletedRoom')
+            io.to(room).emit('deletedRoom')
+            return ;
+        }
         io.to(room).emit('startGame')
         try {
-            const currentRoom = rooms.get(room)
             const [ms, countryCode] = currentRoom.msOptions
             console.log(ms, countryCode)
 
@@ -165,6 +166,7 @@ io.on('connection', async (socket) => {
     socket.on('finishedVoting', (code) => {
         const currentRoom = rooms.get(code)
         if(!currentRoom) {
+            socket.emit('deletedRoom')
             io.to(code).emit('deletedRoom')
             return ;
         }
@@ -180,7 +182,11 @@ io.on('connection', async (socket) => {
 
     socket.on('leaveRoom', (code, leaveRoom) => {
         const oldRoom = rooms.get(code)
-        if(!oldRoom) return ;
+        if(!oldRoom) {
+            socket.emit('deletedRoom')
+            io.to(code).emit('deletedRoom')
+            return ;
+        }
         const newUsers = oldRoom.users.filter(user => user.id !== socket.id)
         rooms.set(code , {
             ...oldRoom,
@@ -194,7 +200,11 @@ io.on('connection', async (socket) => {
     socket.on('kickUser', (userId, code) => {
         console.log(userRooms.get(socket.id), ' kicked ', userId)
         const room = rooms.get(code)
-        if(!room) return ;
+        if(!room) {
+            socket.emit('deletedRoom')
+            io.to(room).emit('deletedRoom')
+            return ;
+        }
         io.to(userId).emit('kickedOut')
         const newUsers = room.users.filter(user => user.id !== userId)
         rooms.set(code, {
@@ -297,7 +307,11 @@ io.on('connection', async (socket) => {
 
     socket.on('deleteRoom', (code, handleAdminDeletion) => {
         const oldRoom = rooms.get(code)
-        if(!oldRoom) return ;
+        if(!oldRoom) {
+            console.log('Room was deleted by admin')
+            socket.emit('deletedRoom')
+            return ;
+        }
         console.log('Deleted room: ' + code)
         socket.to(code).emit('deletedRoom')
         rooms.delete(code)
@@ -309,13 +323,6 @@ io.on('connection', async (socket) => {
     })
 
     socket.on('disconnect', () => {
-        // pendingDisconnections map
-        /*
-        console.log("Disconnected from room:", userRooms)
-        console.log("With user id: ", socket.id)
-        console.log("Available rooms:", rooms)
-        console.log("Pending disconnections:", pendingDisconnections)
-        */
         if(userRooms.has(socket.id)) {
             console.log('Disconected: ' +  socket.id)
             const disconnectUserTimeout = setTimeout(() => {
@@ -324,6 +331,8 @@ io.on('connection', async (socket) => {
                 const oldRoom = rooms.get(oldRoomCode)
                 if(oldRoom) {
                     if(oldRoom.admin === socket.id) {
+                        for(const user of oldRoom.users)
+                            userRooms.delete(user)
                         rooms.delete(oldRoomCode)
                         socket.to(oldRoomCode).emit('deletedRoom')
                         io.in(oldRoomCode).socketsLeave(oldRoomCode)
@@ -346,21 +355,21 @@ io.on('connection', async (socket) => {
 
     socket.on('google-search', (movieTitle) => {
         const roomId = userRooms.get(socket.id) // need to test this
+        if(!roomId) {
+            socket.emit('deletedRoom')
+            return ;
+        }
         io.to(roomId).emit('search-on-google', movieTitle)
         const room = rooms.get(roomId)
         if(room) {
             if(room.admin === socket.id) {
                 rooms.delete(roomId)
+                console.log('Search on google initiated: Room deleted')
                 io.to(roomId).emit('deletedRoom')
                 io.in(roomId).socketsLeave(roomId)
             } 
             else {
-                const newUsers = room.users.filter(user => user.id !== socket.id)
-                rooms.set(roomId, {
-                    ...room,
-                    users: newUsers
-                })
-                socket.to(roomId).emit('userLeft', socket.id, newUsers)
+                // send request to view the movie on google to admin
             }
         }
     })

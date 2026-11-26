@@ -69,14 +69,26 @@ function ChooseMovieGame() {
                     }))
                 })
             }
+            if(!previouslyJoinedRoom && !roomAdmin) navigate('/')
         }
+
+        /*const handleExpiredScreen = event => {
+          if(event.persisted) {
+            console.log('This should fire up')
+            socket.disconnect()
+            navigate('/')
+          }
+        }
+          */
         if(!socket.connected) {
             socket.connect()
         } else {
+          console.log('After back button this is where i arrive')
           const roomAdmin = JSON.parse(sessionStorage.getItem('room'))
           if(roomAdmin) setIsAdmin(true)
         }
         socket.on('connect', handleConnection)
+        //window.addEventListener('pageshow', handleExpiredScreen)
 
         return () => {
           socket.off('connect', handleConnection)
