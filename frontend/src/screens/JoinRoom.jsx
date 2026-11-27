@@ -17,9 +17,10 @@ function JoinRoom() {
             return ;
         }
         const correctedRoomCode = roomCode.toUpperCase()
+        const trimmedPassword = password.trimEnd() // start is already trimmed
 
         const executeJoin = () => {
-            socket.emit('joinRoom', correctedRoomCode, password, username, (isSuccess) => {
+            socket.emit('joinRoom', correctedRoomCode, trimmedPassword, username, (isSuccess) => {
                 if(isSuccess) {
                     sessionStorage.setItem('joinedRoom', JSON.stringify({
                         code: correctedRoomCode,
@@ -74,7 +75,7 @@ function JoinRoom() {
             <form id='join-room-form' onSubmit={handleSubmit}>
                 <label htmlFor="enter-code">Enter the room code:<input id='enter-code' type='text' maxLength={10} value={roomCode} onChange={e => {setRoomCode(e.target.value)}}/></label>
                 <label htmlFor="enter-name">Enter an username:<input id='enter-name' type='text' maxLength={20} placeholder='e.g: Ben Dover' value={username} onChange={e => {setUsername(e.target.value)}}/></label>
-                <label htmlFor="enter-password">Enter the room password:<input id='enter-password' type='text' maxLength={20} value={password} onChange={e => {setPassword(e.target.value)}}/></label>
+                <label htmlFor="enter-password">Enter the room password:<input id='enter-password' type='text' maxLength={20} value={password} onChange={e => {setPassword(e.target.value.trimStart())}}/></label>
                 <button type='submit'>Enter</button>
             </form>
         </>

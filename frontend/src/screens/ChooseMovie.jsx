@@ -72,26 +72,24 @@ function ChooseMovieGame() {
             if(!previouslyJoinedRoom && !roomAdmin) navigate('/')
         }
 
-        /*const handleExpiredScreen = event => {
+        const handleExpiredScreen = event => {
           if(event.persisted) {
-            console.log('This should fire up')
-            socket.disconnect()
-            navigate('/')
+            navigate('/', {replace: true})
           }
         }
-          */
         if(!socket.connected) {
             socket.connect()
-        } else {
-          console.log('After back button this is where i arrive')
+        } else { // not sure i need to set isAdmin here
           const roomAdmin = JSON.parse(sessionStorage.getItem('room'))
           if(roomAdmin) setIsAdmin(true)
+          handleConnection()
         }
         socket.on('connect', handleConnection)
-        //window.addEventListener('pageshow', handleExpiredScreen)
+        window.addEventListener('pageshow', handleExpiredScreen)
 
         return () => {
           socket.off('connect', handleConnection)
+          window.removeEventListener('pageshow', handleExpiredScreen)
         }
     }, [])
     

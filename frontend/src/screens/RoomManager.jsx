@@ -70,10 +70,17 @@ function RoomManager() {
             //console.log(users)
             setUsers(users)
         }
+        const handleBackButton = e => {
+            if(e.persisted) {
+                navigate('/', {replace: true})
+            }
+        }
 
         socket.on('connect', handleConnection)
         socket.on('userJoin', handleUsers)
         socket.on('userLeft', handleUsers)
+
+        window.addEventListener('pageshow', handleBackButton)
 
         if(!socket.connected) {
             socket.connect()
@@ -84,6 +91,7 @@ function RoomManager() {
             socket.off('connect', handleConnection)
             socket.off('userJoin', handleUsers)
             socket.off('userLeft', handleUsers)
+            window.removeEventListener('pageshow', handleBackButton)
         }
     }, [])
 
@@ -101,7 +109,7 @@ function RoomManager() {
         return () => {
             socket.off('connection-expired', handleExpiredConnection)
         }
-    })
+    }, [])
 
     return (
         <div id='room-manager-screen'>

@@ -17,6 +17,7 @@ const apiKey = process.env.API_KEY
 app.use(express.json())
 
 app.get('/', async (req, res) => {
+    console.log('This server is operational')
     res.json({message: 'This server is now operational'})
 })
 
@@ -63,6 +64,7 @@ io.on('connection', async (socket) => {
 
     socket.on('createRoom', (username, password, ms, countryCode, handleRoomCode) => {
         const code = Math.random().toString(36).substring(2, 8).toUpperCase()
+        console.log('Created room with password: ', password)
         rooms.set(code, {
             users: [{
                 id: socket.id,
@@ -78,9 +80,9 @@ io.on('connection', async (socket) => {
     })
     socket.on('joinRoom', (code, password, username, handleJoin) => {
         const currentRoom = rooms.get(code) // check if it doesnt exist
+        console.log('Inputted password: ', password)
         if(currentRoom === undefined || (currentRoom.password && currentRoom.password != password)) {
             handleJoin(false)
-            console.log('Incorrect password')
             return ;
         }
         const newUsersArray = [...currentRoom.users, {
