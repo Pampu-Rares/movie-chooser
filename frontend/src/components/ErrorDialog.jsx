@@ -1,4 +1,4 @@
-import '../css/errorDialog.css'
+import '../css/components-css/errorDialog.css'
 
 function ErrorDialog({message, handleReturn}) {
     return (

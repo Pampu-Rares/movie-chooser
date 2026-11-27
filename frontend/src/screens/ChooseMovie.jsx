@@ -8,6 +8,8 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import ErrorDialog from '../components/ErrorDialog.jsx'
 import Loading from '../components/Loading.jsx'
 import {flushSync} from 'react-dom'
+import MovieVisualiser from '../components/MovieVisualiser.jsx'
+import searchOnGoogle from '../services/googleSearch.js'
 
 function shuffleMovies(movies) {
     for(let i = movies.length - 1; i > 0; i--) {
@@ -22,7 +24,7 @@ function ChooseMovieGame() {
     const [searchParams] = useSearchParams()
     const roomCode = searchParams.get('roomCode')
 
-    const matchRef = useRef(null) // not working as intended
+    const matchRef = useRef(null)
 
     const [socketId, setSocketId] = useState(socket.id)
     const [movies, setMovies] = useState([])
@@ -34,9 +36,11 @@ function ChooseMovieGame() {
       isMatch: false,
       movie: null
     })
+    const [visualisedMovie, setVisualisedMovie] = useState(null)
     const [matchesList, setMatchesList] = useState([])
     const [roundsPlayed, setRoundsPlayed] = useState(0)
     const [waitingForOthers, setWaitingForOthers] = useState(false)
+    const [isAdmin, setIsAdmin] = useState(false)
     const [loading, setLoading] = useState(true) // need to implement this
     const [error, setError] = useState(false)
 
@@ -47,6 +51,7 @@ function ChooseMovieGame() {
             setSocketId(socket.id)
             const roomAdmin = JSON.parse(sessionStorage.getItem('room'))
             if(roomAdmin) {
+              setIsAdmin(true)
               socket.emit('rejoinAdmin', roomAdmin.code, roomAdmin.id, () => {
                   sessionStorage.setItem('room', JSON.stringify({
                       ...roomAdmin,
@@ -64,14 +69,27 @@ function ChooseMovieGame() {
                     }))
                 })
             }
+            if(!previouslyJoinedRoom && !roomAdmin) navigate('/')
+        }
+
+        const handleExpiredScreen = event => {
+          if(event.persisted) {
+            navigate('/', {replace: true})
+          }
         }
         if(!socket.connected) {
             socket.connect()
+        } else { // not sure i need to set isAdmin here
+          const roomAdmin = JSON.parse(sessionStorage.getItem('room'))
+          if(roomAdmin) setIsAdmin(true)
+          handleConnection()
         }
         socket.on('connect', handleConnection)
+        window.addEventListener('pageshow', handleExpiredScreen)
 
         return () => {
           socket.off('connect', handleConnection)
+          window.removeEventListener('pageshow', handleExpiredScreen)
         }
     }, [])
     
@@ -98,6 +116,10 @@ function ChooseMovieGame() {
         else navigate('/joinRoom')
       }
 
+      const handleSearch = title => {
+        searchOnGoogle(title)
+      }
+
       const handleApiError = () => {
         setError(true)
         setLoading(false)
@@ -106,6 +128,7 @@ function ChooseMovieGame() {
 
         socket.on('deletedRoom', handleRoomDeletion)
         socket.on('connection-expired', handleExpiredConnection)
+        socket.on('search-on-google', handleSearch)
         socket.on('api-error', handleApiError)
         return () => {
             socket.off('deleted-room', handleRoomDeletion)
@@ -233,14 +256,38 @@ function ChooseMovieGame() {
         isMatch: false,
       }))
     }
+    const acceptMatch = () => {
+      setCurrentMatch(prev => ({
+        ...prev,
+        isMatch: false,
+      }))
+      setVisualisedMovie(currentMatch.movie)
+    }
+    const handleMovieVisualiserClose = () => {
+      setVisualisedMovie(null)
+    }
 
     const handleErrorReturnBtn = () => {
       navigate('/')
     }
+
+    const handleRoomChange = () => {
+      if(isAdmin) {
+        sessionStorage.removeItem('room')
+        socket.emit('deleteRoom', roomCode, () => {
+            socket.disconnect()
+            navigate('/')
+        })
+      } else  socket.emit('leaveRoom', roomCode, () => {
+                navigate('/joinRoom')
+              })
+    }
+
     // test the movies && movies.length !== 0 stuff
     return (
         <div id='movie-finder-container'>
-          <div id='game-container' className={currentMatch.isMatch || error || loading ? 'blur' : ''}>
+          <div id='game-container' className={currentMatch.isMatch || visualisedMovie || error || loading ? 'blur' : ''}>
+              <button id='room-action-button' className={isAdmin ? "delete-room" : "exit-room"} onClick={handleRoomChange}>{isAdmin ? "Delete Room" : "Leave Room"}</button>
               <p>Socket id: {socketId}</p>
               {matchesList.length ? (
                 <MatchesList matches={matchesList} roomCode={roomCode}/>
@@ -252,9 +299,10 @@ function ChooseMovieGame() {
                 movies && movies.length !== 0 && <MovieSelector movie={currentMovieOption.movie} handleDislike={handleDislike} handleLike={handleLike} like={like} dislike={dislike}/>
                 )}
           </div>
-          <MatchDialog ref={matchRef} match={currentMatch} skipMatch={skipMatch}/>
+          <MatchDialog ref={matchRef} match={currentMatch} skipMatch={skipMatch} acceptMatch={acceptMatch}/>
           {error && <ErrorDialog message={'There was an error with the TMDB server.'} handleReturn={handleErrorReturnBtn}/>}
           {loading && <Loading />}
+          <MovieVisualiser movie={visualisedMovie} roomId={roomCode} handleClose={handleMovieVisualiserClose} />
         </div>
     )
 }

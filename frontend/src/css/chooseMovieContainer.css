@@ -28,3 +28,20 @@
 #game-container #waiting-others {
     color: var(--text-color);
 }
+
+#game-container #room-action-button {
+    margin-bottom: 0;
+    margin-top: clamp(5px, 1vw, 10px);
+    margin-right: clamp(5px, 1vw, 10px);
+    margin-left: auto;
+    border: 3px solid var(--on-primary);
+}
+
+#game-container .delete-room {
+    background-color: red;
+    color: white;
+}
+
+#game-container .delete-room:hover, #game-container .exit-room:hover {
+    transform: scale(1.08);
+}

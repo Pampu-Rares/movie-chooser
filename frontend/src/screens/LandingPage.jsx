@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import '../css/landingPage.css'
 import { useEffect, useState } from 'react'
 import { socket } from '../services/socketLogic'
+import { wakeUpServer } from '../services/serverFetches'
 
 function LandingPage() {
     const navigate = useNavigate()
@@ -16,13 +17,15 @@ function LandingPage() {
     ]
 
     useEffect(() => {
+        wakeUpServer()
         let interval, index = 0
+        let movieTimeout, hidePosterTimeout
         const changePosters = () => {
             interval = setInterval(() => {
                 setHiddenPoster(true)
-                setTimeout(() => {
+                movieTimeout = setTimeout(() => {
                     setMoviePoster(moviePosters[++index])
-                    setTimeout(() => {
+                    hidePosterTimeout = setTimeout(() => {
                         setHiddenPoster(false)
                     }, 10)
                 }, 520)
@@ -57,6 +60,8 @@ function LandingPage() {
         changePosters()
         return () => {
             clearInterval(interval)
+            clearTimeout(movieTimeout)
+            clearTimeout(hidePosterTimeout)
         }
     }, [])
 

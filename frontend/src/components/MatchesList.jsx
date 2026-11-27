@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import '../css/matchesList.css'
+import '../css/components-css/matchesList.css'
 import MovieCard from "./MovieCard"
 import { socket } from '../services/socketLogic'
 import { useNavigate } from 'react-router-dom'
