@@ -8,7 +8,7 @@ import { getPopularMovies, searchMovies, getGameMovies } from './tmdbApiCalls.js
 const app = express()
 
 app.use(cors({
-    origin: '*'
+    origin: process.env.FRONTEND_URL
 }))
 
 const PORT =  process.env.PORT || 3030
