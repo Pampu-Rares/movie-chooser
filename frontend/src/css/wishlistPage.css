@@ -1,0 +1,17 @@
+#wishlist-page {
+    padding: 20px clamp(5px,2%,20px);
+}
+
+#wishlist-page h1 {
+    margin-bottom: 5px;
+}
+
+#zero-wishlists {
+    text-indent: 20px;
+}
+
+#wishlist-page h3 {
+    color: var(--text-color);
+    text-align: center;
+    margin-bottom: 30px;
+}

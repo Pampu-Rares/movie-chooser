@@ -9,6 +9,7 @@ import ChooseMovieGame from './screens/ChooseMovie'
 import RoomManager from './screens/RoomManager'
 import JoinRoom from './screens/JoinRoom'
 import JoinedRoom from './screens/JoinedRoom'
+import Wishlist from './screens/Wishlist'
 
 function App() {
 
@@ -24,6 +25,7 @@ function App() {
           <Route path='/manageRoom' element={<RoomManager />} />
           <Route path='/joinRoom' element={<JoinRoom />} />
           <Route path='/joinedRoom' element={<JoinedRoom />} />
+          <Route path='/wishlist' element={<Wishlist />} />
         </Routes>
       </main>
     </>
